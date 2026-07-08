@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, LogOut, ChevronRight } from "lucide-react";
+import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye } from "lucide-react";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -155,7 +155,7 @@ export default function AdminPage() {
         <form onSubmit={handleLogin} className="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
           <h2 className="text-2xl font-bold mb-6 text-center">Login Siena Admin</h2>
           <input type="password" className="w-full border rounded-lg px-4 py-2 mb-4" placeholder="Parola de acces" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button type="submit" className="w-full bg-brand-green text-white py-2 rounded-lg hover:bg-green-700">Intră în cont</button>
+          <button type="submit" className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800">Intră în cont</button>
         </form>
       </div>
     );
@@ -180,9 +180,9 @@ export default function AdminPage() {
             </div>
             
             <div className="flex border-b text-sm font-medium">
-              <button className={`flex-1 py-3 ${activeTab === 'general' ? 'border-b-2 border-brand-green text-brand-green' : 'text-gray-500 hover:text-gray-700'}`} onClick={() => setActiveTab('general')}>General</button>
-              <button className={`flex-1 py-3 ${activeTab === 'tehnic' ? 'border-b-2 border-brand-green text-brand-green' : 'text-gray-500 hover:text-gray-700'}`} onClick={() => setActiveTab('tehnic')}>Detalii Tehnice</button>
-              <button className={`flex-1 py-3 ${activeTab === 'media' ? 'border-b-2 border-brand-green text-brand-green' : 'text-gray-500 hover:text-gray-700'}`} onClick={() => setActiveTab('media')}>Media & Dotări</button>
+              <button className={`flex-1 py-3 ${activeTab === 'general' ? 'border-b-2 border-green-700 text-green-700' : 'text-gray-500 hover:text-gray-700'}`} onClick={() => setActiveTab('general')}>General</button>
+              <button className={`flex-1 py-3 ${activeTab === 'tehnic' ? 'border-b-2 border-green-700 text-green-700' : 'text-gray-500 hover:text-gray-700'}`} onClick={() => setActiveTab('tehnic')}>Detalii Tehnice</button>
+              <button className={`flex-1 py-3 ${activeTab === 'media' ? 'border-b-2 border-green-700 text-green-700' : 'text-gray-500 hover:text-gray-700'}`} onClick={() => setActiveTab('media')}>Media & Dotări</button>
             </div>
 
             <form onSubmit={handleSave} className="p-6">
@@ -325,7 +325,7 @@ export default function AdminPage() {
                       </div>
                     ))}
                   </div>
-                  <label className="text-sm text-brand-green font-medium flex w-fit cursor-pointer items-center border border-brand-green rounded px-3 py-1 hover:bg-green-50 disabled:opacity-50">
+                  <label className="text-sm text-green-700 font-medium flex w-fit cursor-pointer items-center border border-green-700 rounded px-3 py-1 hover:bg-green-50 disabled:opacity-50">
                     <Plus className="w-4 h-4 mr-1"/> {isUploading ? "Se încarcă..." : "Încarcă Imagini"}
                     <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
                   </label>
@@ -359,7 +359,7 @@ export default function AdminPage() {
               </div>
 
               <div className="pt-8 flex gap-3 mt-4">
-                <button type="submit" className="flex-1 bg-brand-green text-white py-3 rounded-lg font-bold hover:bg-green-700 shadow-md">
+                <button type="submit" className="flex-1 bg-green-700 text-white py-3 rounded-lg font-bold hover:bg-green-800 shadow-md">
                   {editingProp ? "Salvează Modificările" : "Publică Anunțul"}
                 </button>
                 {editingProp && (
@@ -397,15 +397,16 @@ export default function AdminPage() {
                           <div className="font-bold text-gray-900 line-clamp-1">{p.title}</div>
                           <div className="text-xs text-gray-500 capitalize">{p.transaction_type} • {p.property_type}</div>
                         </td>
-                        <td className="p-3 font-bold text-brand-orange">{Number(p.price).toLocaleString()} €</td>
+                        <td className="p-3 font-bold text-orange-600">{Number(p.price).toLocaleString()} €</td>
                         <td className="p-3">
-                          <span className={`px-2 py-1 text-[10px] rounded-full font-bold uppercase tracking-wider ${p.status === 'activ' ? 'bg-green-100 text-brand-green' : 'bg-gray-200 text-gray-600'}`}>
+                          <span className={`px-2 py-1 text-[10px] rounded-full font-bold uppercase tracking-wider ${p.status === 'activ' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
                             {p.status}
                           </span>
                         </td>
                         <td className="p-3 flex justify-end gap-2">
-                          <button onClick={() => handleEdit(p)} className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"><Edit2 className="w-4 h-4"/></button>
-                          <button onClick={() => handleDelete(p.id)} className="p-2 text-red-600 hover:bg-red-50 rounded transition-colors"><Trash2 className="w-4 h-4"/></button>
+                          <a href={`/proprietati/${p.slug}`} target="_blank" className="p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors" title="Vezi pe site"><Eye className="w-4 h-4"/></a>
+                          <button onClick={() => handleEdit(p)} className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="Editează"><Edit2 className="w-4 h-4"/></button>
+                          <button onClick={() => handleDelete(p.id)} className="p-2 text-red-600 hover:bg-red-50 rounded transition-colors" title="Șterge"><Trash2 className="w-4 h-4"/></button>
                         </td>
                       </tr>
                     );

@@ -39,7 +39,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
       {/* Header mic de navigare */}
       <div className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-gray-600 hover:text-brand-green transition-colors font-medium">
+          <Link href="/" className="text-gray-600 hover:text-green-700 transition-colors font-medium">
             &larr; Înapoi la oferte
           </Link>
           <span className="font-bold text-gray-900">{Number(p.price).toLocaleString()} €</span>
@@ -48,7 +48,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
 
       <main className="max-w-5xl mx-auto px-6 mt-8">
         <div className="mb-6">
-          <div className="flex gap-2 text-brand-green font-bold text-sm uppercase tracking-wider mb-2">
+          <div className="flex gap-2 text-green-700 font-bold text-sm uppercase tracking-wider mb-2">
             <span>{p.transaction_type}</span>
             <span>•</span>
             <span>{p.property_type}</span>
@@ -156,10 +156,10 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
           <div className="mt-10 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-6">
              <div className="text-center md:text-left">
                 <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-1">Preț Solicitat</p>
-                <p className="text-4xl font-extrabold text-brand-orange">{Number(p.price).toLocaleString()} €</p>
+                <p className="text-4xl font-extrabold text-orange-600">{Number(p.price).toLocaleString()} €</p>
              </div>
              {p.status === 'activ' && (
-               <a href="tel:0700000000" className="bg-brand-green hover:bg-green-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-transform transform hover:scale-105 shadow-lg w-full md:w-auto text-center">
+               <a href="tel:0700000000" className="bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-transform transform hover:scale-105 shadow-lg w-full md:w-auto text-center">
                  Sună Agentul Acum
                </a>
              )}
