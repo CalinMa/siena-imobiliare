@@ -409,7 +409,7 @@ export default function AdminPage() {
                         <td className="p-3 font-bold text-orange-600">{Number(p.price).toLocaleString()} €</td>
                         <td className="p-3">
                           <span className={`px-2 py-1 text-[10px] rounded-full font-bold uppercase tracking-wider ${p.status === 'activ' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
-                            {p.status}
+                            {p.status === 'inchiriat' || (p.status === 'vandut' && p.transaction_type === 'inchiriere') ? 'închiriat' : p.status}
                           </span>
                         </td>
                         <td className="p-3 flex justify-end gap-2">

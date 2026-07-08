@@ -37,7 +37,7 @@ export default async function Vandute() {
                   <div className="relative h-64 overflow-hidden bg-gray-200">
                     <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
                         <span className="text-orange-600 font-black text-2xl tracking-widest uppercase border-4 border-orange-600 px-6 py-2 rotate-[-15deg]">
-                          {p.status === 'inchiriat' ? 'ÎNCHIRIAT' : 'VÂNDUT'}
+                          {p.status === 'inchiriat' || (p.status === 'vandut' && p.transaction_type === 'inchiriere') ? 'ÎNCHIRIAT' : 'VÂNDUT'}
                         </span>
                     </div>
                     <img src={mainImage} alt={p.title} className="absolute inset-0 w-full h-full object-cover grayscale" />

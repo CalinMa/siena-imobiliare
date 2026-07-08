@@ -63,7 +63,7 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
           {(p.status === 'vandut' || p.status === 'inchiriat') && (
              <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
                  <span className="text-white font-black text-4xl tracking-widest uppercase border-4 border-white px-8 py-3 rotate-[-15deg]">
-                   {p.status === 'inchiriat' ? 'ÎNCHIRIAT' : 'VÂNDUT'}
+                   {p.status === 'inchiriat' || (p.status === 'vandut' && p.transaction_type === 'inchiriere') ? 'ÎNCHIRIAT' : 'VÂNDUT'}
                  </span>
              </div>
           )}
