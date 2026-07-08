@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [properties, setProperties] = useState<any[]>([]);
   const [editingProp, setEditingProp] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState("general");
+  const [isUploading, setIsUploading] = useState(false);
 
   const emptyForm = {
     title: "", description: "", price: 0, status: "activ", images: [] as string[],
@@ -104,9 +105,39 @@ export default function AdminPage() {
     setActiveTab("general");
   };
 
-  const handleAddImage = () => {
-    const url = prompt("Introduceți URL-ul imaginii (ex: https://.../poza.jpg)");
-    if (url) setForm({ ...form, images: [...form.images, url] });
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    setIsUploading(true);
+    const newImages = [...form.images];
+
+    for (let i = 0; i < e.target.files.length; i++) {
+      const file = e.target.files[i];
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.url) {
+          newImages.push(data.url);
+        } else {
+          alert("Eroare la încărcarea imaginii.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Eroare la încărcare.");
+      }
+    }
+    
+    setForm({ ...form, images: newImages });
+    setIsUploading(false);
+    
+    // Reset input
+    e.target.value = '';
   };
 
   const handleAddTag = () => {
@@ -282,7 +313,7 @@ export default function AdminPage() {
               {/* TAB 3: MEDIA */}
               <div className={activeTab === 'media' ? 'space-y-4' : 'hidden'}>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Imagini (Link-uri Cloudinary/Unsplash)</label>
+                  <label className="block text-sm font-medium mb-2">Imagini</label>
                   <div className="space-y-2 mb-2">
                     {form.images.map((img, idx) => (
                       <div key={idx} className="flex items-center justify-between gap-2 text-sm bg-gray-100 p-2 rounded">
@@ -294,9 +325,10 @@ export default function AdminPage() {
                       </div>
                     ))}
                   </div>
-                  <button type="button" onClick={handleAddImage} className="text-sm text-brand-green font-medium flex items-center border border-brand-green rounded px-3 py-1 hover:bg-green-50">
-                    <Plus className="w-4 h-4 mr-1"/> Adaugă URL Imagine
-                  </button>
+                  <label className="text-sm text-brand-green font-medium flex w-fit cursor-pointer items-center border border-brand-green rounded px-3 py-1 hover:bg-green-50 disabled:opacity-50">
+                    <Plus className="w-4 h-4 mr-1"/> {isUploading ? "Se încarcă..." : "Încarcă Imagini"}
+                    <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
+                  </label>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                   <div>
