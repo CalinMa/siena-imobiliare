@@ -43,8 +43,14 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Agenția Siena | Imobiliare",
+  title: "Agenția Siena Imobiliare",
   description: "Agenția Siena - Experți în imobiliare. Găsește casa visurilor tale sau vinde rapid o proprietate. Portofoliu de anunțuri verificate.",
+  icons: {
+    icon: "/logo.jpg"
+  },
+  openGraph: {
+    images: ["/logo.jpg"]
+  }
 };
 
 export default function RootLayout({
