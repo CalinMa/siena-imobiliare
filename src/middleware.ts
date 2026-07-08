@@ -5,6 +5,13 @@ export function middleware(request: NextRequest) {
   // Flag global pentru mentenanță
   const isUnderConstruction = true;
   const path = request.nextUrl.pathname;
+  const hostname = request.nextUrl.hostname;
+  
+  // Aplicăm bariera doar pe domeniul oficial de producție
+  // Ignorăm localhost și domeniile .vercel.app pentru a putea lucra și arăta site-ul
+  if (hostname !== 'sienaimobiliare.ro' && hostname !== 'www.sienaimobiliare.ro') {
+    return NextResponse.next();
+  }
   
   if (isUnderConstruction) {
     // Permitem accesul doar la admin, API, fișiere statice și pagina de coming-soon
