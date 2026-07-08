@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye } from "lucide-react";
+import { COUNTIES } from "@/lib/locations";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -15,7 +16,7 @@ export default function AdminPage() {
 
   const emptyForm = {
     title: "", description: "", price: 0, status: "activ", images: [] as string[],
-    transaction_type: "vanzare", property_type: "apartament", city: "", zone: "",
+    transaction_type: "vanzare", property_type: "apartament", county: "", city: "", zone: "", address: "",
     surface_useable: 0, surface_total: 0, surface_land: 0,
     rooms: 0, bedrooms: 0, bathrooms: 0, floor: "", building_floors: 0, building_construction_year: 0,
     partitioning: "", comfort: "", tags: [] as string[], video_link: "", virtual_tour_link: ""
@@ -226,14 +227,25 @@ export default function AdminPage() {
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Localitate</label>
-                    <input type="text" className="w-full border rounded-lg px-3 py-2" value={form.city} onChange={e => setForm({...form, city: e.target.value})} />
+                    <label className="block text-sm font-medium mb-1">Județ</label>
+                    <select className="w-full border rounded-lg px-3 py-2" value={form.county} onChange={e => setForm({...form, county: e.target.value})}>
+                      <option value="">- Alege Județ -</option>
+                      {COUNTIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Zonă</label>
-                    <input type="text" className="w-full border rounded-lg px-3 py-2" value={form.zone} onChange={e => setForm({...form, zone: e.target.value})} />
+                    <label className="block text-sm font-medium mb-1">Localitate</label>
+                    <input type="text" placeholder="ex: Cluj-Napoca" className="w-full border rounded-lg px-3 py-2" value={form.city} onChange={e => setForm({...form, city: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Zonă / Cartier</label>
+                    <input type="text" placeholder="ex: Gheorgheni" className="w-full border rounded-lg px-3 py-2" value={form.zone} onChange={e => setForm({...form, zone: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Adresă Exactă pt Hartă</label>
+                    <input type="text" placeholder="ex: Strada Florilor nr. 10" className="w-full border rounded-lg px-3 py-2" value={form.address} onChange={e => setForm({...form, address: e.target.value})} />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -267,69 +279,79 @@ export default function AdminPage() {
               {/* TAB 2: TEHNIC */}
               <div className={activeTab === 'tehnic' ? 'space-y-4' : 'hidden'}>
                 <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață utilă (mp)</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_useable} onChange={e => setForm({...form, surface_useable: Number(e.target.value)})} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață totală (mp)</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_total} onChange={e => setForm({...form, surface_total: Number(e.target.value)})} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață teren (mp)</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_land} onChange={e => setForm({...form, surface_land: Number(e.target.value)})} />
-                  </div>
+                  {form.property_type !== 'teren' && (
+                    <>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață utilă (mp)</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_useable} onChange={e => setForm({...form, surface_useable: Number(e.target.value)})} />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață totală (mp)</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_total} onChange={e => setForm({...form, surface_total: Number(e.target.value)})} />
+                      </div>
+                    </>
+                  )}
+                  {form.property_type !== 'apartament' && (
+                    <div>
+                      <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață teren (mp)</label>
+                      <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_land} onChange={e => setForm({...form, surface_land: Number(e.target.value)})} />
+                    </div>
+                  )}
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Camere</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.rooms} onChange={e => setForm({...form, rooms: Number(e.target.value)})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Dormitoare</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bedrooms} onChange={e => setForm({...form, bedrooms: Number(e.target.value)})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Băi</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bathrooms} onChange={e => setForm({...form, bathrooms: Number(e.target.value)})} />
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Etaj</label>
-                    <input type="text" placeholder="ex: 2" className="w-full border rounded-lg px-3 py-2" value={form.floor} onChange={e => setForm({...form, floor: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-500">Etaje Clădire</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_floors} onChange={e => setForm({...form, building_floors: Number(e.target.value)})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">An Const.</label>
-                    <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_construction_year} onChange={e => setForm({...form, building_construction_year: Number(e.target.value)})} />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Compartimentare</label>
-                    <select className="w-full border rounded-lg px-3 py-2" value={form.partitioning} onChange={e => setForm({...form, partitioning: e.target.value})}>
-                      <option value="">- Alege -</option>
-                      <option value="decomandat">Decomandat</option>
-                      <option value="semidecomandat">Semidecomandat</option>
-                      <option value="nedecomandat">Nedecomandat</option>
-                      <option value="circular">Circular</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Confort</label>
-                    <select className="w-full border rounded-lg px-3 py-2" value={form.comfort} onChange={e => setForm({...form, comfort: e.target.value})}>
-                      <option value="">- Alege -</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="lux">Lux</option>
-                    </select>
-                  </div>
-                </div>
+                {form.property_type !== 'teren' && (
+                  <>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Camere</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.rooms} onChange={e => setForm({...form, rooms: Number(e.target.value)})} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Dormitoare</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bedrooms} onChange={e => setForm({...form, bedrooms: Number(e.target.value)})} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Băi</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bathrooms} onChange={e => setForm({...form, bathrooms: Number(e.target.value)})} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Etaj</label>
+                        <input type="text" placeholder="ex: 2" className="w-full border rounded-lg px-3 py-2" value={form.floor} onChange={e => setForm({...form, floor: e.target.value})} />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-500">Etaje Clădire</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_floors} onChange={e => setForm({...form, building_floors: Number(e.target.value)})} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">An Const.</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_construction_year} onChange={e => setForm({...form, building_construction_year: Number(e.target.value)})} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Compartimentare</label>
+                        <select className="w-full border rounded-lg px-3 py-2" value={form.partitioning} onChange={e => setForm({...form, partitioning: e.target.value})}>
+                          <option value="">- Alege -</option>
+                          <option value="decomandat">Decomandat</option>
+                          <option value="semidecomandat">Semidecomandat</option>
+                          <option value="nedecomandat">Nedecomandat</option>
+                          <option value="circular">Circular</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Confort</label>
+                        <select className="w-full border rounded-lg px-3 py-2" value={form.comfort} onChange={e => setForm({...form, comfort: e.target.value})}>
+                          <option value="">- Alege -</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="lux">Lux</option>
+                        </select>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* TAB 3: MEDIA */}
