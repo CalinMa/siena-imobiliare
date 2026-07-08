@@ -17,7 +17,7 @@ export default async function SoldPropertiesPage() {
         <div className="mb-10 text-center max-w-2xl mx-auto">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Portofoliu Istoric</h1>
           <p className="text-lg text-gray-600 mb-6">Proprietăți tranzacționate cu succes în ultimii ani de echipa noastră.</p>
-          <Link href="/" className="text-blue-600 font-medium hover:underline">
+          <Link href="/" className="text-brand-green font-medium hover:underline">
             &larr; Înapoi la ofertele active
           </Link>
         </div>
@@ -36,7 +36,7 @@ export default async function SoldPropertiesPage() {
                 <div key={p.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col relative opacity-80 hover:opacity-100 transition-opacity">
                   <div className="relative h-64 overflow-hidden bg-gray-200">
                     <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
-                        <span className="text-white font-black text-2xl tracking-widest uppercase border-4 border-white px-6 py-2 rotate-[-15deg]">VÂNDUT</span>
+                        <span className="text-brand-orange font-black text-2xl tracking-widest uppercase border-4 border-brand-orange px-6 py-2 rotate-[-15deg]">VÂNDUT</span>
                     </div>
                     <img src={mainImage} alt={p.title} className="absolute inset-0 w-full h-full object-cover grayscale" />
                   </div>

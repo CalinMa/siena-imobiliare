@@ -61,12 +61,12 @@ export default function RootLayout({
               <img src="/logo.jpg" alt="Siena Imobiliare" className="h-12 w-auto object-contain" />
             </Link>
             <nav className="hidden md:flex items-center gap-8 font-medium text-gray-600">
-              <Link href="/" className="hover:text-green-600 transition-colors">Oferte Active</Link>
-              <Link href="/vandute" className="hover:text-green-600 transition-colors">Portofoliu</Link>
+              <Link href="/" className="hover:text-brand-orange transition-colors">Oferte Active</Link>
+              <Link href="/vandute" className="hover:text-brand-orange transition-colors">Portofoliu</Link>
             </nav>
             <div className="flex items-center gap-4">
-               <a href="https://www.facebook.com/sienaimobiliare" target="_blank" className="text-green-600 hover:text-green-800"><FacebookIcon className="w-5 h-5"/></a>
-               <a href="https://instagram.com/" target="_blank" className="text-pink-600 hover:text-pink-800"><InstagramIcon className="w-5 h-5"/></a>
+               <a href="https://www.facebook.com/sienaimobiliare" target="_blank" className="text-brand-green hover:text-brand-orange transition-colors"><FacebookIcon className="w-5 h-5"/></a>
+               <a href="https://instagram.com/" target="_blank" className="text-pink-600 hover:text-pink-800 transition-colors"><InstagramIcon className="w-5 h-5"/></a>
                {/* Minimalist TikTok icon replacement */}
                <a href="https://tiktok.com/" target="_blank" className="text-black hover:text-gray-800 font-black border border-black rounded w-5 h-5 flex items-center justify-center text-[10px] pb-[1px]">d</a>
             </div>
@@ -101,7 +101,7 @@ export default function RootLayout({
             </div>
           </div>
           <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-gray-800 text-sm text-center">
-            &copy; {new Date().getFullYear()} Agenția Siena. Toate drepturile rezervate.
+            &copy; {new Date().getFullYear()} Agenția Siena Imobiliare. Toate drepturile rezervate.
           </div>
         </footer>
       </body>

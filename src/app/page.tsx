@@ -19,7 +19,7 @@ export default async function Home() {
         <div className="relative z-20 max-w-4xl px-4">
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-md">Găsește casa visurilor tale</h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-8 font-light drop-shadow">Portofoliu exclusivist de proprietăți selectate cu grijă.</p>
-          <a href="#anunturi" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-all transform hover:scale-105 shadow-xl inline-block">
+          <a href="#anunturi" className="bg-brand-green hover:bg-green-800 text-white px-8 py-4 rounded-full font-medium transition-all transform hover:scale-105 shadow-xl inline-block">
             Vezi Ofertele
           </a>
         </div>
@@ -55,9 +55,9 @@ export default async function Home() {
                     </div>
                   </div>
                   <div className="p-6 flex-1 flex flex-col">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">{p.title}</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-brand-green transition-colors">{p.title}</h3>
                     <p className="text-gray-500 text-sm line-clamp-3 mb-4 flex-1">{p.description}</p>
-                    <div className="text-blue-600 font-medium text-sm flex items-center mt-auto">
+                    <div className="text-brand-orange font-medium text-sm flex items-center mt-auto">
                       Detalii complete &rarr;
                     </div>
                   </div>
