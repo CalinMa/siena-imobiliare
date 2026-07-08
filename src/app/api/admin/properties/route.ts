@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import db from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 async function isAuthenticated() {
   const cookieStore = await cookies();
   return cookieStore.get('admin_token')?.value === 'authenticated';

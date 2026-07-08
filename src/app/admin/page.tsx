@@ -35,7 +35,7 @@ export default function AdminPage() {
   }, []);
 
   const loadProperties = () => {
-    fetch("/api/admin/properties")
+    fetch("/api/admin/properties", { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => setProperties(data));
   };
