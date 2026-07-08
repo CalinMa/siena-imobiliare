@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import db from "@/lib/db";
 import Link from "next/link";
 import { Metadata } from "next";
+import VideoEmbed from "@/components/VideoEmbed";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -75,6 +76,14 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
                 <img src={img} className="w-full h-full object-cover" />
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Video Embed */}
+        {p.video_link && (
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col items-center">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 w-full text-left">Video / Tur Virtual</h2>
+            <VideoEmbed url={p.video_link} />
           </div>
         )}
 

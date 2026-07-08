@@ -330,10 +330,10 @@ export default function AdminPage() {
                     <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
                   </label>
                 </div>
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Link Video (YouTube)</label>
-                    <input type="text" className="w-full border rounded-lg px-3 py-2" value={form.video_link} onChange={e => setForm({...form, video_link: e.target.value})} />
+                    <label className="block text-sm font-medium mb-1">Link Video (YouTube, Instagram, TikTok, Facebook)</label>
+                    <input type="text" placeholder="ex: https://youtube.com/watch?v=..." className="w-full border rounded-lg px-3 py-2" value={form.video_link} onChange={e => setForm({...form, video_link: e.target.value})} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Link Tur Virtual (3D)</label>
