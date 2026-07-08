@@ -3,7 +3,7 @@ import db from "@/lib/db";
 import Link from "next/link";
 import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const [rows]: any = await db.query('SELECT * FROM properties WHERE slug = ?', [slug]);
   const property = rows[0];
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function PropertyPage({ params }: { params: { slug: string } }) {
+export default async function PropertyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [rows]: any = await db.query('SELECT * FROM properties WHERE slug = ?', [slug]);
   const p = rows[0];
