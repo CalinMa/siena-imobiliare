@@ -60,12 +60,14 @@ export default async function PropertyPage({ params }: { params: Promise<{ slug:
         
         {/* Imagine Principală */}
         <div className="w-full h-[40vh] md:h-[60vh] bg-gray-200 rounded-2xl overflow-hidden mb-6 shadow-md relative">
-          {p.status === 'vandut' && (
+          {(p.status === 'vandut' || p.status === 'inchiriat') && (
              <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
-                 <span className="text-white font-black text-4xl tracking-widest uppercase border-4 border-white px-8 py-3 rotate-[-15deg]">VÂNDUT</span>
+                 <span className="text-white font-black text-4xl tracking-widest uppercase border-4 border-white px-8 py-3 rotate-[-15deg]">
+                   {p.status === 'inchiriat' ? 'ÎNCHIRIAT' : 'VÂNDUT'}
+                 </span>
              </div>
           )}
-          <img src={mainImage} className={`w-full h-full object-cover ${p.status==='vandut' ? 'grayscale' : ''}`} alt={p.title} />
+          <img src={mainImage} className={`w-full h-full object-cover ${(p.status === 'vandut' || p.status === 'inchiriat') ? 'grayscale' : ''}`} alt={p.title} />
         </div>
 
         {/* Galerie (daca sunt mai multe imagini) */}

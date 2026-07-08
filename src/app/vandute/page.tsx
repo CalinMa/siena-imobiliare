@@ -6,8 +6,8 @@ export const metadata = {
   description: "Istoricul proprietăților tranzacționate de Agenția Siena. Experiență și rezultate dovedite.",
 };
 
-export default async function SoldPropertiesPage() {
-  const [rows]: any = await db.query('SELECT * FROM properties WHERE status = "vandut" ORDER BY updated_at DESC');
+export default async function Vandute() {
+  const [rows]: any = await db.query('SELECT * FROM properties WHERE status IN ("vandut", "inchiriat") ORDER BY created_at DESC');
   const properties = rows;
 
   return (
@@ -36,7 +36,9 @@ export default async function SoldPropertiesPage() {
                 <div key={p.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col relative opacity-80 hover:opacity-100 transition-opacity">
                   <div className="relative h-64 overflow-hidden bg-gray-200">
                     <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
-                        <span className="text-orange-600 font-black text-2xl tracking-widest uppercase border-4 border-orange-600 px-6 py-2 rotate-[-15deg]">VÂNDUT</span>
+                        <span className="text-orange-600 font-black text-2xl tracking-widest uppercase border-4 border-orange-600 px-6 py-2 rotate-[-15deg]">
+                          {p.status === 'inchiriat' ? 'ÎNCHIRIAT' : 'VÂNDUT'}
+                        </span>
                     </div>
                     <img src={mainImage} alt={p.title} className="absolute inset-0 w-full h-full object-cover grayscale" />
                   </div>

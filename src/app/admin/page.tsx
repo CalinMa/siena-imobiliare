@@ -231,8 +231,17 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-medium mb-1">Status</label>
                     <select className="w-full border rounded-lg px-3 py-2" value={form.status} onChange={e => setForm({...form, status: e.target.value})}>
-                      <option value="activ">Activ (La vânzare)</option>
-                      <option value="vandut">Vândut / Tranzacționat</option>
+                      {form.transaction_type === 'inchiriere' ? (
+                        <>
+                          <option value="activ">Activ (La închiriere)</option>
+                          <option value="inchiriat">Închiriat</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="activ">Activ (La vânzare)</option>
+                          <option value="vandut">Vândut / Tranzacționat</option>
+                        </>
+                      )}
                     </select>
                   </div>
                 </div>
