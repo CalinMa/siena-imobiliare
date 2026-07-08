@@ -87,9 +87,16 @@ export default function AdminPage() {
 
   const handleEdit = (p: any) => {
     setEditingProp(p);
+    
+    let currentStatus = p.status;
+    if (p.transaction_type === 'inchiriere' && p.status === 'vandut') {
+      currentStatus = 'inchiriat';
+    }
+
     setForm({
       ...emptyForm,
       ...p,
+      status: currentStatus,
       price: Number(p.price) || 0,
       surface_useable: Number(p.surface_useable) || 0,
       surface_total: Number(p.surface_total) || 0,
@@ -196,7 +203,13 @@ export default function AdminPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Tip Tranzacție</label>
-                    <select className="w-full border rounded-lg px-3 py-2" value={form.transaction_type} onChange={e => setForm({...form, transaction_type: e.target.value})}>
+                    <select className="w-full border rounded-lg px-3 py-2" value={form.transaction_type} onChange={e => {
+                      const tType = e.target.value;
+                      let newStatus = form.status;
+                      if (tType === 'inchiriere' && newStatus === 'vandut') newStatus = 'inchiriat';
+                      if (tType === 'vanzare' && newStatus === 'inchiriat') newStatus = 'vandut';
+                      setForm({...form, transaction_type: tType, status: newStatus});
+                    }}>
                       <option value="vanzare">Vânzare</option>
                       <option value="inchiriere">Închiriere</option>
                     </select>
