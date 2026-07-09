@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 export default async function Vandute() {
-  const [rows]: any = await db.query('SELECT * FROM properties WHERE status IN ("vandut", "inchiriat") ORDER BY created_at DESC');
+  const [rows]: any = await db.query('SELECT * FROM properties WHERE status IN ("vandut", "inchiriat", "Tranzacționată de noi", "Tranzacționată de alții") ORDER BY created_at DESC');
   const properties = rows;
 
   return (

@@ -67,9 +67,23 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
               <div key={p.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col relative">
                 <Link href={url} className="block relative h-64 overflow-hidden bg-gray-200">
                   <img src={mainImage} alt={p.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
-                    {Number(p.price).toLocaleString()} €
+                  <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
+                    <div className="text-lg font-extrabold text-orange-600">
+                      {Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}
+                    </div>
                   </div>
+                  {p.status !== 'activ' && p.status !== 'Activă' && (
+                    <div className="absolute inset-0 bg-black/50 z-10 flex items-center justify-center p-4">
+                      <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
+                        p.status.toLowerCase().includes('retras') ? 'bg-gray-600' :
+                        p.status.toLowerCase().includes('tranzacționat') || p.status.toLowerCase().includes('vândut') || p.status.toLowerCase().includes('închiriat') ? 'bg-green-700' :
+                        p.status.toLowerCase().includes('antecontract') ? 'bg-amber-600' :
+                        'bg-orange-600'
+                      }`}>
+                        {p.status}
+                      </span>
+                    </div>
+                  )}
                 </Link>
                 
                 <div className="p-6 flex-1 flex flex-col">
@@ -87,7 +101,7 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
                     <Link href={url} className="text-green-700 font-bold text-sm flex items-center hover:text-green-800 transition-colors">
                       Detalii complete &rarr;
                     </Link>
-                    {p.status === 'activ' && (
+                    {(p.status === 'activ' || p.status === 'Activă') && (
                       <a 
                         href={`https://wa.me/40700000000?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
                         target="_blank"

@@ -43,8 +43,8 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Agenția Siena Imobiliare",
-  description: "Agenția Siena - Experți în imobiliare. Găsește casa visurilor tale sau vinde rapid o proprietate. Portofoliu de anunțuri verificate.",
+  title: "Siena Imobiliare",
+  description: "Siena Imobiliare - Experți în imobiliare. Găsește casa visurilor tale sau vinde rapid o proprietate. Portofoliu de anunțuri verificate și servicii premium.",
   icons: {
     icon: "/logo.jpg"
   },
@@ -53,28 +53,48 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+import db from '@/lib/db';
+
+async function getSettings() {
+  try {
+    const [rows]: any = await db.query('SELECT * FROM settings');
+    const settings: Record<string, string> = {};
+    for (const row of rows) settings[row.setting_key] = row.setting_value;
+    return settings;
+  } catch (e) {
+    return {};
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
+  
   return (
     <html lang="ro" className="scroll-smooth">
       <body className={inter.className}>
-        <header className="bg-white border-b sticky top-0 z-40 shadow-sm">
-          <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center">
-              <img src="/logo.jpg" alt="Siena Imobiliare" className="h-12 w-auto object-contain" />
+        <header className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm transition-all">
+          <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center transform hover:scale-105 transition-transform duration-300">
+              <img src="/logo.jpg" alt="Siena Imobiliare" className="h-16 md:h-20 w-auto object-contain" />
             </Link>
-            <nav className="hidden md:flex items-center gap-8 font-medium text-gray-600">
-              <Link href="/" className="hover:text-orange-600 transition-colors">Oferte Active</Link>
-              <Link href="/vandute" className="hover:text-orange-600 transition-colors">Portofoliu</Link>
+            
+            {/* Nav Links */}
+            <nav className="hidden md:flex items-center gap-2 font-bold text-gray-700 text-sm tracking-wide uppercase">
+              <Link href="/" className="px-5 py-2.5 rounded-full hover:bg-gray-50 hover:text-orange-600 transition-all">Oferte Active</Link>
+              <Link href="/vandute" className="px-5 py-2.5 rounded-full hover:bg-gray-50 hover:text-orange-600 transition-all">Portofoliu</Link>
+              <Link href="/contact" className="ml-4 px-6 py-2.5 bg-gray-900 text-white rounded-full hover:bg-orange-600 hover:shadow-md transform hover:-translate-y-0.5 transition-all">Contact</Link>
             </nav>
-            <div className="flex items-center gap-4">
-               <a href="https://www.facebook.com/sienaimobiliare" target="_blank" className="text-green-700 hover:text-orange-600 transition-colors"><FacebookIcon className="w-5 h-5"/></a>
-               <a href="https://instagram.com/" target="_blank" className="text-pink-600 hover:text-pink-800 transition-colors"><InstagramIcon className="w-5 h-5"/></a>
-               {/* Minimalist TikTok icon replacement */}
-               <a href="https://tiktok.com/" target="_blank" className="text-black hover:text-gray-800 font-black border border-black rounded w-5 h-5 flex items-center justify-center text-[10px] pb-[1px]">d</a>
+            
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+               {settings.social_facebook && <a href={settings.social_facebook} target="_blank" className="p-2 text-gray-400 hover:text-blue-600 bg-gray-50 rounded-full hover:bg-blue-50 transition-colors"><FacebookIcon className="w-5 h-5"/></a>}
+               {settings.social_instagram && <a href={settings.social_instagram} target="_blank" className="p-2 text-gray-400 hover:text-pink-600 bg-gray-50 rounded-full hover:bg-pink-50 transition-colors"><InstagramIcon className="w-5 h-5"/></a>}
+               {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" className="p-2 w-9 h-9 text-gray-400 hover:text-black bg-gray-50 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center font-black text-sm">d</a>}
             </div>
           </div>
         </header>
@@ -84,8 +104,8 @@ export default function RootLayout({
         <footer className="bg-gray-900 text-gray-400 py-12">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-white text-xl font-bold mb-4">Agenția Siena</h3>
-              <p className="text-sm">Vindem și preluăm proprietăți. Volum mic, atenție maximă pentru fiecare client. Consultanță premium în imobiliare.</p>
+              <h3 className="text-white text-xl font-bold mb-4">Siena Imobiliare</h3>
+              <p className="text-sm">{settings.agency_description || 'Vindem și preluăm proprietăți.'}</p>
             </div>
             <div>
               <h3 className="text-white text-lg font-bold mb-4">Linkuri Utile</h3>
@@ -97,9 +117,9 @@ export default function RootLayout({
             <div>
               <h3 className="text-white text-lg font-bold mb-4">Rețele Sociale</h3>
               <div className="flex flex-col gap-2">
-                <a href="https://www.facebook.com/sienaimobiliare" target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><FacebookIcon className="w-4 h-4"/> Facebook</a>
-                <a href="#" target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><InstagramIcon className="w-4 h-4"/> Instagram (Urmează)</a>
-                <a href="#" target="_blank" className="hover:text-white flex items-center gap-2 text-sm font-bold">TikTok (Urmează)</a>
+                {settings.social_facebook && <a href={settings.social_facebook} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><FacebookIcon className="w-4 h-4"/> Facebook</a>}
+                {settings.social_instagram && <a href={settings.social_instagram} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><InstagramIcon className="w-4 h-4"/> Instagram</a>}
+                {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" className="hover:text-white flex items-center gap-2 text-sm font-bold">TikTok</a>}
               </div>
               <div className="mt-4">
                 <a href="#" target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
@@ -107,7 +127,7 @@ export default function RootLayout({
             </div>
           </div>
           <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-gray-800 text-sm text-center">
-            &copy; {new Date().getFullYear()} Agenția Siena Imobiliare. Toate drepturile rezervate.
+            &copy; {new Date().getFullYear()} Siena Imobiliare SRL. Toate drepturile rezervate.
           </div>
         </footer>
       </body>

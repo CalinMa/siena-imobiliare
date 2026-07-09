@@ -15,7 +15,8 @@ export async function GET() {
     const [rows] = await db.query('SELECT * FROM properties ORDER BY created_at DESC');
     return NextResponse.json(rows);
   } catch (err) {
-    return NextResponse.json({ error: 'Database error' }, { status: 500 });
+    console.error('PROPERTIES API DB ERROR:', err);
+    return NextResponse.json({ error: 'Database error', details: String(err) }, { status: 500 });
   }
 }
 
@@ -31,14 +32,14 @@ export async function POST(request: Request) {
   try {
     const [result] = await db.query(
       `INSERT INTO properties (
-        title, slug, description, price, status, images,
+        title, slug, description, price, currency, status, images,
         transaction_type, property_type, county, city, zone, address,
         surface_useable, surface_total, surface_land,
         rooms, bedrooms, bathrooms, floor, building_floors, building_construction_year,
         partitioning, comfort, tags, video_link, virtual_tour_link
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        data.title, slug, data.description || '', data.price || 0, data.status || 'activ', images,
+        data.title, slug, data.description || '', data.price || 0, data.currency || 'EUR', data.status || 'activ', images,
         data.transaction_type || 'vanzare', data.property_type || 'apartament', data.county || '', data.city || '', data.zone || '', data.address || '',
         data.surface_useable || null, data.surface_total || null, data.surface_land || null,
         data.rooms || null, data.bedrooms || null, data.bathrooms || null, data.floor || '', data.building_floors || null, data.building_construction_year || null,
