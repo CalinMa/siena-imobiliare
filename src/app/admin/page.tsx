@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye, CheckCircle, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye, CheckCircle, AlertCircle, GripVertical } from "lucide-react";
 import { COUNTIES } from "@/lib/locations";
 import { CRM_TAGS } from "@/lib/crmTags";
 
@@ -14,6 +14,7 @@ export default function AdminPage() {
   const [editingProp, setEditingProp] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState("general");
   const [isUploading, setIsUploading] = useState(false);
+  const [draggedImgIdx, setDraggedImgIdx] = useState<number | null>(null);
   const [adminTab, setAdminTab] = useState<'anunturi' | 'cont'>('anunturi');
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null);
@@ -479,12 +480,39 @@ export default function AdminPage() {
                   <label className="block text-sm font-medium mb-2">Imagini</label>
                   <div className="space-y-2 mb-2">
                     {form.images.map((img, idx) => (
-                      <div key={idx} className="flex items-center justify-between gap-2 text-sm bg-gray-100 p-2 rounded">
-                        <span className="truncate flex-1 max-w-[200px]">{img}</span>
-                        <img src={img} className="h-8 w-12 object-cover rounded" />
+                      <div 
+                        key={idx} 
+                        draggable
+                        onDragStart={() => setDraggedImgIdx(idx)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (draggedImgIdx === null || draggedImgIdx === idx) return;
+                          const newImages = [...form.images];
+                          const draggedImg = newImages[draggedImgIdx];
+                          newImages.splice(draggedImgIdx, 1);
+                          newImages.splice(idx, 0, draggedImg);
+                          setForm({...form, images: newImages});
+                          setDraggedImgIdx(null);
+                        }}
+                        onDragEnd={() => setDraggedImgIdx(null)}
+                        className={`flex items-center justify-between gap-2 text-sm p-2 rounded cursor-grab active:cursor-grabbing border ${
+                          draggedImgIdx === idx ? 'opacity-50 bg-gray-50' : 
+                          idx === 0 ? 'bg-green-50 border-green-500' : 'bg-gray-100 border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <GripVertical className="w-4 h-4 text-gray-400" />
+                          <img src={img} className="h-10 w-14 object-cover rounded" />
+                          <div className="flex flex-col">
+                            <span className={`font-bold text-xs ${idx === 0 ? 'text-green-700' : 'text-gray-600'}`}>
+                              {idx === 0 ? "🌟 Imagine Principală" : `Imagine ${idx + 1}`}
+                            </span>
+                          </div>
+                        </div>
                         <button type="button" onClick={() => {
                           const n = [...form.images]; n.splice(idx,1); setForm({...form, images: n});
-                        }} className="text-red-500 hover:text-red-700 ml-2"><Trash2 className="w-4 h-4"/></button>
+                        }} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4"/></button>
                       </div>
                     ))}
                   </div>
