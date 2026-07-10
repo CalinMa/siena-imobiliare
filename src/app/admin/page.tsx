@@ -26,7 +26,7 @@ export default function AdminPage() {
 
   const emptyForm = {
     title: "", description: "", price: 0, currency: "EUR", status: "Activă", images: [] as string[],
-    transaction_type: "vanzare", property_type: "apartament", county: "", city: "", zone: "", address: "",
+    transaction_type: "vanzare", property_type: "apartament", county: "", city: "", zone: "", address: "", transacted_by_us: false,
     surface_useable: 0, surface_total: 0, surface_land: 0,
     rooms: 0, bedrooms: 0, bathrooms: 0, floor: "", building_floors: 0, building_construction_year: 0,
     partitioning: "", comfort: "", tags: [] as string[], video_link: "", virtual_tour_link: ""
@@ -132,9 +132,10 @@ export default function AdminPage() {
     
     let currentStatus = p.status;
     if (currentStatus === 'activ') currentStatus = 'Activă';
-    // Keeping vandut/inchiriat as they are now
     if (currentStatus === 'vandut') currentStatus = 'Vândut';
-    if (currentStatus === 'inchiriat') currentStatus = 'Închiriat';
+    if (currentStatus === 'inchiriat' || currentStatus === 'Închiriat') currentStatus = 'Închiriată';
+    if (currentStatus === 'Antecontract / Rezervat') currentStatus = 'Antecontract / Rezervată';
+    if (currentStatus === 'Retrasa') currentStatus = 'Retrasă';
 
     setForm({
       ...emptyForm,
@@ -152,6 +153,7 @@ export default function AdminPage() {
       building_construction_year: Number(p.building_construction_year) || 0,
       images: typeof p.images === "string" ? JSON.parse(p.images) : (p.images || []),
       tags: typeof p.tags === "string" ? JSON.parse(p.tags) : (p.tags || []),
+      transacted_by_us: Boolean(p.transacted_by_us),
     });
     setActiveTab("general");
   };
@@ -378,16 +380,25 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Status</label>
-                    <select className="w-full border rounded-lg px-3 py-2" value={form.status} onChange={e => setForm({...form, status: e.target.value})}>
+                    <select className="w-full border rounded-lg px-3 py-2" value={form.status} onChange={e => {
+                      const newStatus = e.target.value;
+                      const isClosed = ['Vândut', 'Închiriată', 'Tranzacționată de noi', 'Tranzacționată de alții'].includes(newStatus);
+                      setForm({...form, status: newStatus, transacted_by_us: isClosed ? form.transacted_by_us : false});
+                    }}>
                       <option value="Activă">Activă</option>
                       <option value="Incompletă">Incompletă</option>
-                      <option value="Antecontract / Rezervat">Antecontract / Rezervat</option>
+                      <option value="Antecontract / Rezervată">Antecontract / Rezervată</option>
                       {form.transaction_type === 'vanzare' && <option value="Vândut">Vândut</option>}
-                      {form.transaction_type === 'inchiriere' && <option value="Închiriat">Închiriat</option>}
-                      <option value="Tranzacționată de noi">Tranzacționată de noi</option>
-                      <option value="Tranzacționată de alții">Tranzacționată de alții</option>
+                      {form.transaction_type === 'inchiriere' && <option value="Închiriată">Închiriată</option>}
                       <option value="Retrasă">Retrasă</option>
+                      {/* Past options kept for backwards compatibility */}
+                      {form.status === 'Tranzacționată de noi' && <option value="Tranzacționată de noi">Tranzacționată de noi (vechi)</option>}
+                      {form.status === 'Tranzacționată de alții' && <option value="Tranzacționată de alții">Tranzacționată de alții (vechi)</option>}
                     </select>
+                    <label className={`flex items-center gap-2 mt-3 ${['Vândut', 'Închiriată', 'Tranzacționată de noi', 'Tranzacționată de alții'].includes(form.status) ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`} title={!['Vândut', 'Închiriată', 'Tranzacționată de noi', 'Tranzacționată de alții'].includes(form.status) ? "Disponibil doar pentru status Vândut sau Închiriată" : ""}>
+                      <input type="checkbox" disabled={!['Vândut', 'Închiriată', 'Tranzacționată de noi', 'Tranzacționată de alții'].includes(form.status)} className="w-5 h-5 rounded border-gray-300 text-green-600 disabled:bg-gray-200" checked={form.transacted_by_us} onChange={e => setForm({...form, transacted_by_us: e.target.checked})} />
+                      <span className="text-sm font-medium text-gray-700">Tranzacționată de noi</span>
+                    </label>
                   </div>
                 </div>
                 <div>
@@ -611,11 +622,16 @@ export default function AdminPage() {
                           <div className="font-bold text-gray-900 line-clamp-1">{p.title}</div>
                           <div className="text-xs text-gray-500 capitalize">{p.transaction_type} • {p.property_type}</div>
                         </td>
-                        <td className="p-3 font-bold text-orange-600">{Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}</td>
-                        <td className="p-3">
+                        <td className="p-3 font-bold text-orange-600">{Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}</td>
+                        <td className="p-3 flex flex-col gap-1 items-start">
                           <span className={`px-2 py-1 text-[10px] rounded-full font-bold uppercase tracking-wider ${p.status === 'Activă' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
                             {p.status}
                           </span>
+                          {p.transacted_by_us ? (
+                            <span className="px-2 py-1 text-[10px] rounded-full font-bold uppercase tracking-wider bg-blue-100 text-blue-700">
+                              Tranzacționată de noi
+                            </span>
+                          ) : null}
                         </td>
                         <td className="p-3 flex justify-end gap-2">
                           <a href={`/proprietati/${p.slug}`} target="_blank" className="p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors" title="Vezi pe site"><Eye className="w-4 h-4"/></a>
@@ -645,6 +661,13 @@ export default function AdminPage() {
                   <div>
                     <div className="font-bold">Afișează portofoliul istoric pe Prima Pagină</div>
                     <div className="text-sm text-gray-500">Dacă este bifat, vizitatorii vor vedea anunțurile vândute/închiriate alături de cele active.</div>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 p-4 bg-gray-50 border rounded-lg cursor-pointer hover:bg-gray-100">
+                  <input type="checkbox" className="w-6 h-6 text-green-600 rounded" checked={settings.hide_prices_on_cards === 'true'} onChange={e => setSettings({...settings, hide_prices_on_cards: e.target.checked ? 'true' : 'false'})} />
+                  <div>
+                    <div className="font-bold">Ascunde prețurile pe cardurile de anunțuri</div>
+                    <div className="text-sm text-gray-500">Dacă este bifat, prețurile nu vor fi afișate pe pozele anunțurilor în lista de proprietăți.</div>
                   </div>
                 </label>
               </div>

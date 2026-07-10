@@ -76,6 +76,9 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
     similar = [...similar, ...otherRows];
   }
 
+  const hasTechnicalDetails = p.surface_useable > 0 || p.surface_total > 0 || p.surface_land > 0 || p.bathrooms > 0 || p.rooms > 0 || p.bedrooms > 0 || p.floor || p.building_construction_year > 0;
+  const hasTags = Object.keys(groupedTags).length > 0;
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header mic de navigare */}
@@ -84,7 +87,7 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
           <Link href="/" className="text-gray-600 hover:text-green-700 transition-colors font-medium">
             &larr; Înapoi la oferte
           </Link>
-          <span className="font-bold text-gray-900">{Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}</span>
+          <span className="font-bold text-gray-900">{Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}</span>
         </div>
       </div>
 
@@ -117,78 +120,84 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
         )}
 
         {/* Detalii Tehnice */}
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-6">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Caracteristici Principale</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {p.surface_useable > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață utilă</span>
-                <span className="text-xl font-medium text-gray-900">{p.surface_useable} mp</span>
-              </div>
+        {(hasTechnicalDetails || hasTags) && (
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-6">
+            {hasTechnicalDetails && (
+              <>
+                <h2 className="text-2xl font-bold mb-6 text-gray-800">Caracteristici Principale</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  {p.surface_useable > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață utilă</span>
+                      <span className="text-xl font-medium text-gray-900">{p.surface_useable} mp</span>
+                    </div>
+                  )}
+                  {p.surface_total > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață totală</span>
+                      <span className="text-xl font-medium text-gray-900">{p.surface_total} mp</span>
+                    </div>
+                  )}
+                  {p.surface_land > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață teren</span>
+                      <span className="text-xl font-medium text-gray-900">{p.surface_land} mp</span>
+                    </div>
+                  )}
+                  {p.bathrooms > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Băi</span>
+                      <span className="text-xl font-medium text-gray-900">{p.bathrooms}</span>
+                    </div>
+                  )}
+                  {p.rooms > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Camere</span>
+                      <span className="text-xl font-medium text-gray-900">{p.rooms}</span>
+                    </div>
+                  )}
+                  {p.bedrooms > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Dormitoare</span>
+                      <span className="text-xl font-medium text-gray-900">{p.bedrooms}</span>
+                    </div>
+                  )}
+                  {p.floor && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Etaj</span>
+                      <span className="text-xl font-medium text-gray-900">{p.floor} {p.building_floors > 0 ? `/ ${p.building_floors}` : ''}</span>
+                    </div>
+                  )}
+                  {p.building_construction_year > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">An construcție</span>
+                      <span className="text-xl font-medium text-gray-900">{p.building_construction_year}</span>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
-            {p.surface_total > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață totală</span>
-                <span className="text-xl font-medium text-gray-900">{p.surface_total} mp</span>
-              </div>
-            )}
-            {p.surface_land > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață teren</span>
-                <span className="text-xl font-medium text-gray-900">{p.surface_land} mp</span>
-              </div>
-            )}
-            {p.bathrooms > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Băi</span>
-                <span className="text-xl font-medium text-gray-900">{p.bathrooms}</span>
-              </div>
-            )}
-            {p.rooms > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Camere</span>
-                <span className="text-xl font-medium text-gray-900">{p.rooms}</span>
-              </div>
-            )}
-            {p.bedrooms > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Dormitoare</span>
-                <span className="text-xl font-medium text-gray-900">{p.bedrooms}</span>
-              </div>
-            )}
-            {p.floor && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Etaj</span>
-                <span className="text-xl font-medium text-gray-900">{p.floor} {p.building_floors > 0 ? `/ ${p.building_floors}` : ''}</span>
-              </div>
-            )}
-            {p.building_construction_year > 0 && (
-              <div className="flex flex-col">
-                <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">An construcție</span>
-                <span className="text-xl font-medium text-gray-900">{p.building_construction_year}</span>
+            
+            {hasTags && (
+              <div className={`space-y-6 ${hasTechnicalDetails ? 'mt-10 pt-8 border-t' : ''}`}>
+                <h3 className="text-2xl font-bold text-gray-800">Dotări și Facilități</h3>
+                {Object.entries(groupedTags).map(([category, catTags]) => (
+                  <div key={category}>
+                    <h4 className="font-bold text-gray-600 mb-3 text-sm uppercase tracking-wider">{category}</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {catTags.map((t: string, idx: number) => (
+                        <span key={idx} className="bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-full font-medium text-sm shadow-sm flex items-center gap-1.5">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-          
-          {Object.keys(groupedTags).length > 0 && (
-            <div className="mt-10 pt-8 border-t space-y-6">
-              <h3 className="text-2xl font-bold text-gray-800">Dotări și Facilități</h3>
-              {Object.entries(groupedTags).map(([category, catTags]) => (
-                <div key={category}>
-                  <h4 className="font-bold text-gray-600 mb-3 text-sm uppercase tracking-wider">{category}</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {catTags.map((t: string, idx: number) => (
-                      <span key={idx} className="bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-full font-medium text-sm shadow-sm flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Descriere */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-6">
@@ -199,9 +208,9 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
           
           
           <div className="mt-10 pt-8 border-t flex flex-col items-center justify-between gap-6">
-             <div className="text-center w-full">
+              <div className="text-center w-full">
                 <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-1">Preț Solicitat</p>
-                <p className="text-4xl font-extrabold text-orange-600 mb-6">{Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}</p>
+                <p className="text-4xl font-extrabold text-orange-600 mb-6">{Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}</p>
              </div>
              
              {(p.status === 'activ' || p.status === 'Activă') && (
@@ -254,7 +263,7 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
         {similar.length > 0 && (
           <div className="mt-16">
             <h2 className="text-2xl font-bold mb-8 text-gray-800 border-b pb-4">Proprietăți Similare</h2>
-            <PropertyGrid properties={similar} hideSearch={true} />
+            <PropertyGrid properties={similar} hideSearch={true} hidePrices={settings.hide_prices_on_cards === 'true'} />
           </div>
         )}
       </main>

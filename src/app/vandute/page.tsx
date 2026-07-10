@@ -11,6 +11,12 @@ export default async function Vandute() {
   const [rows]: any = await db.query('SELECT * FROM properties WHERE status IN ("vandut", "inchiriat", "Tranzacționată de noi", "Tranzacționată de alții") ORDER BY created_at DESC');
   const properties = rows;
 
+  let settings: Record<string, string> = {};
+  try {
+    const [sRows]: any = await db.query('SELECT * FROM settings');
+    for (const row of sRows) settings[row.setting_key] = row.setting_value;
+  } catch(e) {}
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-6">
       <div className="max-w-7xl mx-auto">
@@ -23,7 +29,7 @@ export default async function Vandute() {
           </Link>
         </div>
 
-        <PropertyGrid properties={properties} />
+        <PropertyGrid properties={properties} hidePrices={settings.hide_prices_on_cards === 'true'} />
       </div>
     </div>
   );

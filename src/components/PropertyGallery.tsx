@@ -23,8 +23,10 @@ export default function PropertyGallery({
 
   const mainImage = images[0];
   const galleryImages = images.map(src => ({ src }));
-  const showOverlay = status === 'vandut' || status === 'inchiriat';
-  const overlayText = status === 'inchiriat' || (status === 'vandut' && transactionType === 'inchiriere') ? 'ÎNCHIRIAT' : 'VÂNDUT';
+  const isSold = typeof status === 'string' && (status.toLowerCase().includes('vandut') || status.toLowerCase().includes('vândut'));
+  const isRented = typeof status === 'string' && (status.toLowerCase().includes('inchiriat') || status.toLowerCase().includes('închiriat'));
+  const showOverlay = isSold || isRented;
+  const overlayText = isRented || (isSold && transactionType === 'inchiriere') ? 'ÎNCHIRIAT' : 'VÂNDUT';
 
   return (
     <>

@@ -9,14 +9,24 @@ const WhatsappIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export default function PropertyGrid({ properties, basePath = '/proprietati', hideSearch = false }: { properties: any[], basePath?: string, hideSearch?: boolean }) {
+const PROPERTY_TYPES = [
+  { id: 'apartament', label: 'Apartamente' },
+  { id: 'casa', label: 'Case / Vile' },
+  { id: 'teren', label: 'Terenuri' },
+  { id: 'comercial', label: 'Spații Comerciale' },
+  { id: 'birouri', label: 'Birouri' },
+  { id: 'industrial', label: 'Spații Industriale' }
+];
+
+export default function PropertyGrid({ properties, basePath = '/proprietati', hideSearch = false, hidePrices = false }: { properties: any[], basePath?: string, hideSearch?: boolean, hidePrices?: boolean }) {
   const [search, setSearch] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const filteredProperties = hideSearch ? properties : properties.filter((p) => {
     const term = search.toLowerCase();
     const tags = Array.isArray(p.tags) ? p.tags : (typeof p.tags === 'string' ? JSON.parse(p.tags) : []);
     
-    return (
+    const matchesSearch = (
       p.title?.toLowerCase().includes(term) ||
       p.description?.toLowerCase().includes(term) ||
       p.city?.toLowerCase().includes(term) ||
@@ -24,28 +34,59 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
       p.zone?.toLowerCase().includes(term) ||
       tags.some((t: string) => t.toLowerCase().includes(term))
     );
+
+    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(p.property_type);
+
+    return matchesSearch && matchesType;
   });
 
   return (
     <div>
       {/* Search Bar */}
       {!hideSearch && (
-        <div className="mb-10 max-w-2xl">
-          <div className="relative">
+        <div className="mb-10">
+          <div className="max-w-2xl relative mb-4">
             <input
-            type="text"
-            placeholder="Caută după oraș, zonă, cuvinte cheie..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-5 pr-12 py-4 rounded-full border-2 border-gray-200 focus:border-green-700 outline-none text-lg shadow-sm transition-colors"
-          />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              type="text"
+              placeholder="Caută după oraș, zonă, cuvinte cheie..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-5 pr-12 py-4 rounded-full border-2 border-gray-200 focus:border-green-700 outline-none text-lg shadow-sm transition-colors"
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
           </div>
-        </div>
-          {search && (
-            <p className="text-sm text-gray-500 mt-2 ml-2">
-              Am găsit {filteredProperties.length} {filteredProperties.length === 1 ? "rezultat" : "rezultate"}.
+          
+          {/* Property Type Filters */}
+          <div className="flex flex-wrap gap-2 items-center">
+            {PROPERTY_TYPES.map(type => {
+              const isSelected = selectedTypes.includes(type.id);
+              return (
+                <button
+                  key={type.id}
+                  onClick={() => {
+                    if (isSelected) {
+                      setSelectedTypes(selectedTypes.filter(t => t !== type.id));
+                    } else {
+                      setSelectedTypes([...selectedTypes, type.id]);
+                    }
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                    isSelected 
+                      ? 'bg-green-700 text-white shadow-md border-green-700' 
+                      : 'bg-white text-gray-600 border border-gray-200 hover:border-green-600 hover:text-green-700'
+                  }`}
+                >
+                  {type.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {(search || selectedTypes.length > 0) && (
+            <p className="text-sm text-gray-500 mt-4 ml-2">
+              Afișez {filteredProperties.length} {filteredProperties.length === 1 ? "rezultat" : "rezultate"}.
             </p>
           )}
         </div>
@@ -67,21 +108,37 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
               <div key={p.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col relative">
                 <Link href={url} className="block relative h-64 overflow-hidden bg-gray-200">
                   <img src={mainImage} alt={p.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
-                    <div className="text-lg font-extrabold text-orange-600">
-                      {Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}
+                  {!hidePrices && (
+                    <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
+                      <div className="text-lg font-extrabold text-orange-600">
+                        {Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}
+                      </div>
                     </div>
-                  </div>
-                  {p.status !== 'activ' && p.status !== 'Activă' && (
-                    <div className="absolute inset-0 bg-black/50 z-10 flex items-center justify-center p-4">
-                      <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
-                        p.status.toLowerCase().includes('retras') ? 'bg-gray-600' :
-                        p.status.toLowerCase().includes('tranzacționat') || p.status.toLowerCase().includes('vândut') || p.status.toLowerCase().includes('închiriat') ? 'bg-green-700' :
-                        p.status.toLowerCase().includes('antecontract') ? 'bg-amber-600' :
-                        'bg-orange-600'
-                      }`}>
-                        {p.status}
-                      </span>
+                  )}
+                  {(p.status === 'activ' || p.status === 'Activă') && (
+                    <div className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
+                      <div className="text-sm font-extrabold text-green-700 uppercase tracking-wider">
+                        {p.transaction_type === 'inchiriere' ? 'De închiriat' : 'De vânzare'}
+                      </div>
+                    </div>
+                  )}
+                  {(p.status !== 'activ' && p.status !== 'Activă' || p.transacted_by_us) && (
+                    <div className="absolute inset-0 bg-black/50 z-10 flex flex-col gap-2 items-center justify-center p-4">
+                      {p.status !== 'activ' && p.status !== 'Activă' && (
+                        <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
+                          p.status.toLowerCase().includes('retras') ? 'bg-gray-600' :
+                          p.status.toLowerCase().includes('tranzacționat') || p.status.toLowerCase().includes('vândut') || p.status.toLowerCase().includes('închiriat') ? 'bg-green-700' :
+                          p.status.toLowerCase().includes('antecontract') ? 'bg-amber-600' :
+                          'bg-orange-600'
+                        }`}>
+                          {p.status}
+                        </span>
+                      )}
+                      {p.transacted_by_us && (
+                        <span className="text-white font-black text-xs tracking-widest uppercase px-3 py-1 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white bg-blue-600">
+                          Tranzacționată de noi
+                        </span>
+                      )}
                     </div>
                   )}
                 </Link>
