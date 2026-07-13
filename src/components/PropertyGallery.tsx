@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Image from "next/image";
 
 export default function PropertyGallery({ 
@@ -81,6 +82,7 @@ export default function PropertyGallery({
         close={() => setIndex(-1)}
         slides={galleryImages}
         carousel={{ finite: false }}
+        plugins={[Zoom]}
         styles={{ container: { backgroundColor: "rgba(0, 0, 0, .9)" } }}
       />
     </>

@@ -67,10 +67,10 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
 
         {displayImages.length > 1 && (
           <>
-            <button onClick={scrollPrev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
+            <button onClick={scrollPrev} className="hidden md:block absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
               <ChevronLeft size={20} />
             </button>
-            <button onClick={scrollNext} className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
+            <button onClick={scrollNext} className="hidden md:block absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
               <ChevronRight size={20} />
             </button>
           </>
@@ -79,14 +79,14 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
         <Link href={url} className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between">
           <div>
             {!hidePrices && (
-              <div className="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm pointer-events-auto">
+              <div className="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
                 <div className="text-lg font-extrabold text-orange-600">
                   {Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}
                 </div>
               </div>
             )}
             {(p.status === 'activ' || p.status === 'Activă') && (
-              <div className="absolute top-4 left-4 z-30 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm pointer-events-auto">
+              <div className="absolute top-4 left-4 z-30 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
                 <div className="text-sm font-extrabold text-green-700 uppercase tracking-wider">
                   {p.transaction_type === 'inchiriere' ? 'De închiriat' : 'De vânzare'}
                 </div>
@@ -94,7 +94,7 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
             )}
           </div>
           {((p.status !== 'activ' && p.status !== 'Activă') || Boolean(p.transacted_by_us)) && (
-            <div className="absolute inset-0 bg-black/50 z-30 flex flex-col gap-2 items-center justify-center p-4 pointer-events-auto">
+            <div className="absolute inset-0 bg-black/50 z-30 flex flex-col gap-2 items-center justify-center p-4">
               {p.status !== 'activ' && p.status !== 'Activă' && (
                 <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
                   p.status.toLowerCase().includes('retras') ? 'bg-gray-600' :
