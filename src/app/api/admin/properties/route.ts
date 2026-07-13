@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import db from '@/lib/db';
+import { syncPropertyToImografic } from '@/lib/imograficSync';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,12 @@ export async function POST(request: Request) {
         data.partitioning || '', data.comfort || '', tags, data.video_link || '', data.virtual_tour_link || '', data.transacted_by_us || false
       ]
     );
-    return NextResponse.json({ success: true, id: (result as any).insertId });
+    
+    // Sincronizare cu Imografic
+    const insertId = (result as any).insertId;
+    syncPropertyToImografic(insertId).catch(err => console.error("Sync error:", err));
+
+    return NextResponse.json({ success: true, id: insertId });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to create' }, { status: 500 });
   }

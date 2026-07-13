@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import db from '@/lib/db';
+import { syncPropertyToImografic } from '@/lib/imograficSync';
 
 async function isAuthenticated() {
   const cookieStore = await cookies();
@@ -34,6 +35,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
           id
         ]
       );
+      
+      // Sincronizare cu Imografic
+      syncPropertyToImografic(id).catch(err => console.error("Sync error:", err));
+      
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to update' }, { status: 500 });

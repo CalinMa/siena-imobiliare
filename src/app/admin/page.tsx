@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye, CheckCircle, AlertCircle, GripVertical } from "lucide-react";
-import { COUNTIES } from "@/lib/locations";
+import { ROMANIA_DATA, ROMANIA_NEIGHBORHOODS } from "@/lib/locationData";
 import { CRM_TAGS } from "@/lib/crmTags";
 
 export default function AdminPage() {
@@ -34,6 +34,10 @@ export default function AdminPage() {
 
   const [form, setForm] = useState(emptyForm);
   const [newTag, setNewTag] = useState("");
+
+  const availableCounties = Object.keys(ROMANIA_DATA).sort();
+  const availableCities = form.county && ROMANIA_DATA[form.county] ? [...ROMANIA_DATA[form.county]].sort() : [];
+  const availableZones = form.city && ROMANIA_NEIGHBORHOODS[form.city] ? [...ROMANIA_NEIGHBORHOODS[form.city]].sort() : null;
 
   useEffect(() => {
     fetch("/api/admin/auth")
@@ -348,18 +352,28 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Județ</label>
-                    <select className="w-full border rounded-lg px-3 py-2 min-w-0" value={form.county} onChange={e => setForm({...form, county: e.target.value})}>
+                    <select className="w-full border rounded-lg px-3 py-2 min-w-0" value={form.county} onChange={e => setForm({...form, county: e.target.value, city: "", zone: ""})}>
                       <option value="">- Alege Județ -</option>
-                      {COUNTIES.map(c => <option key={c} value={c}>{c}</option>)}
+                      {availableCounties.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Localitate</label>
-                    <input type="text" placeholder="ex: Cluj-Napoca" className="w-full border rounded-lg px-3 py-2" value={form.city} onChange={e => setForm({...form, city: e.target.value})} />
+                    <select className="w-full border rounded-lg px-3 py-2 min-w-0" value={form.city} onChange={e => setForm({...form, city: e.target.value, zone: ""})} disabled={!form.county}>
+                      <option value="">- Alege Localitate -</option>
+                      {availableCities.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Zonă / Cartier</label>
-                    <input type="text" placeholder="ex: Gheorgheni" className="w-full border rounded-lg px-3 py-2" value={form.zone} onChange={e => setForm({...form, zone: e.target.value})} />
+                    {availableZones ? (
+                      <select className="w-full border rounded-lg px-3 py-2 min-w-0" value={form.zone} onChange={e => setForm({...form, zone: e.target.value})}>
+                        <option value="">- Alege Cartier -</option>
+                        {availableZones.map(z => <option key={z} value={z}>{z}</option>)}
+                      </select>
+                    ) : (
+                      <input type="text" placeholder="ex: Gheorgheni" className="w-full border rounded-lg px-3 py-2" value={form.zone} onChange={e => setForm({...form, zone: e.target.value})} disabled={!form.city} />
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Adresă Exactă pt Hartă</label>
@@ -744,6 +758,23 @@ export default function AdminPage() {
                     <label className="block font-medium mb-1 text-sm">TikTok Link</label>
                     <input type="text" className="w-full border rounded-lg px-3 py-2" value={settings.social_tiktok || ''} onChange={e => setSettings({...settings, social_tiktok: e.target.value})} />
                   </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-gray-800">5. Integrare Imografic</h3>
+                <div className="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                  <label className="block font-bold text-purple-900 mb-2 text-sm">Imografic API Key</label>
+                  <input 
+                    type="password" 
+                    className="w-full border border-purple-200 rounded-lg px-3 py-2 focus:ring-purple-500 focus:border-purple-500" 
+                    value={settings.imografic_api_key || ''} 
+                    onChange={e => setSettings({...settings, imografic_api_key: e.target.value})} 
+                    placeholder="imo_key_xxxxxxxxxxxxxxxxxxxxxxxxxxx" 
+                  />
+                  <p className="text-xs text-purple-700 mt-2">
+                    Lipește aici token-ul generat din contul tău de pe Imografic. Anunțurile se vor sincroniza automat la fiecare salvare.
+                  </p>
                 </div>
               </div>
 
