@@ -48,10 +48,11 @@ export const metadata: Metadata = {
   title: "Siena Imobiliare",
   description: "Siena Imobiliare - Experți în imobiliare. Găsește casa visurilor tale sau vinde rapid o proprietate. Portofoliu de anunțuri verificate și servicii premium.",
   icons: {
-    icon: "/logo.jpg"
+    icon: "/icon.png",
+    apple: "/icon.png"
   },
   openGraph: {
-    images: ["/logo.jpg"]
+    images: ["/icon.png"]
   }
 };
 
