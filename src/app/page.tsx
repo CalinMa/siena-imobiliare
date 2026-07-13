@@ -4,6 +4,8 @@ import db from "@/lib/db";
 import PropertyGrid from "@/components/PropertyGrid";
 import GoogleReviewsMarquee from "@/components/GoogleReviewsMarquee";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Agenția Siena | Anunțuri Imobiliare de Top",
   description: "Găsește proprietatea perfectă alături de Agenția Siena. Descoperă portofoliul nostru exclusivist.",

@@ -9,6 +9,8 @@ import ShareButton from "@/components/ShareButton";
 import PropertyGrid from "@/components/PropertyGrid";
 import { CRM_TAGS } from "@/lib/crmTags";
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const [rows]: any = await db.query('SELECT * FROM properties WHERE slug = ?', [slug]);

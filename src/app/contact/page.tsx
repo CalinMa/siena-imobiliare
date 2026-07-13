@@ -2,6 +2,8 @@ import Link from "next/link";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import db from "@/lib/db";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Contact | Agenția Siena Imobiliare",
   description: "Contactează-ne pentru orice întrebare sau pentru a programa o vizionare. Siena Imobiliare te ajută să găsești proprietatea perfectă.",

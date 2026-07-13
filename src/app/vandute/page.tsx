@@ -2,6 +2,8 @@ import Link from "next/link";
 import db from "@/lib/db";
 import PropertyGrid from "@/components/PropertyGrid";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Proprietăți Vândute | Agenția Siena",
   description: "Istoricul proprietăților tranzacționate de Agenția Siena. Experiență și rezultate dovedite.",
