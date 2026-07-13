@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const WhatsappIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -18,6 +20,131 @@ const PROPERTY_TYPES = [
   { id: 'birouri', label: 'Birouri' },
   { id: 'industrial', label: 'Spații Industriale' }
 ];
+
+const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: boolean, basePath: string }) => {
+  const imagesRaw = typeof p.images === 'string' ? JSON.parse(p.images) : (p.images || []);
+  let displayImages = imagesRaw.slice(0, 5);
+  if (displayImages.length === 0) {
+    displayImages = ['https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800'];
+  }
+  const url = `${basePath}/${p.slug}`;
+  
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  const scrollPrev = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  return (
+    <div 
+      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col relative active:scale-[0.98]"
+      onMouseEnter={() => setHasInteracted(true)}
+      onTouchStart={() => setHasInteracted(true)}
+    >
+      <div className="relative h-64 overflow-hidden bg-gray-200">
+        <div className="absolute inset-0 z-0 overflow-hidden" ref={emblaRef}>
+          <div className="flex h-full">
+            {displayImages.map((img: string, idx: number) => (
+              <Link href={url} key={idx} className="relative flex-[0_0_100%] h-full min-w-0">
+                {(idx === 0 || hasInteracted) ? (
+                  <Image src={img} alt={`${p.title} - ${idx + 1}`} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                ) : (
+                  <div className="w-full h-full bg-gray-200" />
+                )}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {displayImages.length > 1 && (
+          <>
+            <button onClick={scrollPrev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
+              <ChevronLeft size={20} />
+            </button>
+            <button onClick={scrollNext} className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
+              <ChevronRight size={20} />
+            </button>
+          </>
+        )}
+
+        <Link href={url} className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between">
+          <div>
+            {!hidePrices && (
+              <div className="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm pointer-events-auto">
+                <div className="text-lg font-extrabold text-orange-600">
+                  {Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}
+                </div>
+              </div>
+            )}
+            {(p.status === 'activ' || p.status === 'Activă') && (
+              <div className="absolute top-4 left-4 z-30 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm pointer-events-auto">
+                <div className="text-sm font-extrabold text-green-700 uppercase tracking-wider">
+                  {p.transaction_type === 'inchiriere' ? 'De închiriat' : 'De vânzare'}
+                </div>
+              </div>
+            )}
+          </div>
+          {((p.status !== 'activ' && p.status !== 'Activă') || Boolean(p.transacted_by_us)) && (
+            <div className="absolute inset-0 bg-black/50 z-30 flex flex-col gap-2 items-center justify-center p-4 pointer-events-auto">
+              {p.status !== 'activ' && p.status !== 'Activă' && (
+                <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
+                  p.status.toLowerCase().includes('retras') ? 'bg-gray-600' :
+                  p.status.toLowerCase().includes('tranzacționat') || p.status.toLowerCase().includes('vândut') || p.status.toLowerCase().includes('închiriat') ? 'bg-green-700' :
+                  p.status.toLowerCase().includes('antecontract') ? 'bg-amber-600' :
+                  'bg-orange-600'
+                }`}>
+                  {p.status}
+                </span>
+              )}
+              {Boolean(p.transacted_by_us) && (
+                <span className="text-white font-black text-xs tracking-widest uppercase px-3 py-1 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white bg-blue-600">
+                  Tranzacționată de noi
+                </span>
+              )}
+            </div>
+          )}
+        </Link>
+      </div>
+      
+      <div className="p-6 flex-1 flex flex-col">
+        <Link href={url} className="block">
+          <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-700 transition-colors">{p.title}</h3>
+          <div className="flex gap-3 text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">
+            {p.rooms > 0 && <span>{p.rooms} Camere</span>}
+            {p.surface_useable > 0 && <span>{p.surface_useable} mp</span>}
+            {p.city && <span>• {p.city}</span>}
+          </div>
+          <p className="text-gray-500 text-sm line-clamp-3 mb-4">{p.description}</p>
+        </Link>
+        
+        <div className="mt-auto pt-4 border-t flex items-center justify-between">
+          <Link href={url} className="text-green-700 font-bold text-sm flex items-center hover:text-green-800 transition-colors">
+            Detalii complete &rarr;
+          </Link>
+          {(p.status === 'activ' || p.status === 'Activă') && (
+            <a 
+              href={`https://wa.me/40700000000?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
+              target="_blank"
+              className="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-full transition-transform hover:scale-110 shadow-sm"
+              title="Scrie pe WhatsApp"
+            >
+              <WhatsappIcon className="w-5 h-5" />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function PropertyGrid({ properties, basePath = '/proprietati', hideSearch = false, hidePrices = false }: { properties: any[], basePath?: string, hideSearch?: boolean, hidePrices?: boolean }) {
   const [search, setSearch] = useState("");
@@ -100,80 +227,9 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProperties.map((p: any) => {
-            const images = typeof p.images === 'string' ? JSON.parse(p.images) : (p.images || []);
-            const mainImage = images?.[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800';
-            const url = `${basePath}/${p.slug}`;
-            
-            return (
-              <div key={p.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col relative">
-                <Link href={url} className="block relative h-64 overflow-hidden bg-gray-200">
-                  <Image src={mainImage} alt={p.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
-                  {!hidePrices && (
-                    <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
-                      <div className="text-lg font-extrabold text-orange-600">
-                        {Number(p.price).toLocaleString()} {p.currency === 'RON' ? 'RON' : p.currency === 'USD' ? '$' : '€'}{p.transaction_type === 'inchiriere' ? ' / lună' : ''}
-                      </div>
-                    </div>
-                  )}
-                  {(p.status === 'activ' || p.status === 'Activă') && (
-                    <div className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
-                      <div className="text-sm font-extrabold text-green-700 uppercase tracking-wider">
-                        {p.transaction_type === 'inchiriere' ? 'De închiriat' : 'De vânzare'}
-                      </div>
-                    </div>
-                  )}
-                  {((p.status !== 'activ' && p.status !== 'Activă') || Boolean(p.transacted_by_us)) && (
-                    <div className="absolute inset-0 bg-black/50 z-10 flex flex-col gap-2 items-center justify-center p-4">
-                      {p.status !== 'activ' && p.status !== 'Activă' && (
-                        <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
-                          p.status.toLowerCase().includes('retras') ? 'bg-gray-600' :
-                          p.status.toLowerCase().includes('tranzacționat') || p.status.toLowerCase().includes('vândut') || p.status.toLowerCase().includes('închiriat') ? 'bg-green-700' :
-                          p.status.toLowerCase().includes('antecontract') ? 'bg-amber-600' :
-                          'bg-orange-600'
-                        }`}>
-                          {p.status}
-                        </span>
-                      )}
-                      {Boolean(p.transacted_by_us) && (
-                        <span className="text-white font-black text-xs tracking-widest uppercase px-3 py-1 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white bg-blue-600">
-                          Tranzacționată de noi
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </Link>
-                
-                <div className="p-6 flex-1 flex flex-col">
-                  <Link href={url} className="block">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-700 transition-colors">{p.title}</h3>
-                    <div className="flex gap-3 text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">
-                      {p.rooms > 0 && <span>{p.rooms} Camere</span>}
-                      {p.surface_useable > 0 && <span>{p.surface_useable} mp</span>}
-                      {p.city && <span>• {p.city}</span>}
-                    </div>
-                    <p className="text-gray-500 text-sm line-clamp-3 mb-4">{p.description}</p>
-                  </Link>
-                  
-                  <div className="mt-auto pt-4 border-t flex items-center justify-between">
-                    <Link href={url} className="text-green-700 font-bold text-sm flex items-center hover:text-green-800 transition-colors">
-                      Detalii complete &rarr;
-                    </Link>
-                    {(p.status === 'activ' || p.status === 'Activă') && (
-                      <a 
-                        href={`https://wa.me/40700000000?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
-                        target="_blank"
-                        className="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-full transition-transform hover:scale-110 shadow-sm"
-                        title="Scrie pe WhatsApp"
-                      >
-                        <WhatsappIcon className="w-5 h-5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {filteredProperties.map((p: any) => (
+            <PropertyCardItem key={p.id} p={p} hidePrices={hidePrices} basePath={basePath} />
+          ))}
         </div>
       )}
     </div>
