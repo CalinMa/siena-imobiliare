@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const WhatsappIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -107,7 +108,7 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
             return (
               <div key={p.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col relative">
                 <Link href={url} className="block relative h-64 overflow-hidden bg-gray-200">
-                  <img src={mainImage} alt={p.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <Image src={mainImage} alt={p.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
                   {!hidePrices && (
                     <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
                       <div className="text-lg font-extrabold text-orange-600">
@@ -122,7 +123,7 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
                       </div>
                     </div>
                   )}
-                  {(p.status !== 'activ' && p.status !== 'Activă' || p.transacted_by_us) && (
+                  {((p.status !== 'activ' && p.status !== 'Activă') || Boolean(p.transacted_by_us)) && (
                     <div className="absolute inset-0 bg-black/50 z-10 flex flex-col gap-2 items-center justify-center p-4">
                       {p.status !== 'activ' && p.status !== 'Activă' && (
                         <span className={`text-white font-black text-sm tracking-widest uppercase px-4 py-2 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white ${
@@ -134,7 +135,7 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
                           {p.status}
                         </span>
                       )}
-                      {p.transacted_by_us && (
+                      {Boolean(p.transacted_by_us) && (
                         <span className="text-white font-black text-xs tracking-widest uppercase px-3 py-1 rotate-[-10deg] text-center shadow-lg rounded-sm border-2 border-white bg-blue-600">
                           Tranzacționată de noi
                         </span>

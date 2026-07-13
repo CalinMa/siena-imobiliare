@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import Image from "next/image";
 
 export default function PropertyGallery({ 
   images, 
@@ -47,9 +48,12 @@ export default function PropertyGallery({
                 Apasă pentru galerie
             </span>
         </div>
-        <img 
-          src={mainImage} 
-          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02] ${showOverlay ? 'grayscale' : ''}`} 
+        <Image 
+          src={mainImage}
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 80vw"
+          className={`object-cover transition-transform duration-500 group-hover:scale-[1.02] ${showOverlay ? 'grayscale' : ''}`} 
           alt={title} 
         />
       </div>
@@ -64,7 +68,7 @@ export default function PropertyGallery({
               onClick={() => setIndex(idx + 1)}
             >
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors z-10"></div>
-              <img src={img} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={`${title} - ${idx + 2}`} />
+              <Image src={img} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-110" alt={`${title} - ${idx + 2}`} />
             </div>
           ))}
         </div>
