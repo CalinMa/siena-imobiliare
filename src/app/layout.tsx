@@ -93,9 +93,9 @@ export default async function RootLayout({
             
             {/* Social Icons */}
             <div className="flex items-center gap-3">
-               {settings.social_facebook && <a href={settings.social_facebook} target="_blank" className="p-2 text-gray-400 hover:text-blue-600 bg-gray-50 rounded-full hover:bg-blue-50 transition-colors"><FacebookIcon className="w-5 h-5"/></a>}
-               {settings.social_instagram && <a href={settings.social_instagram} target="_blank" className="p-2 text-gray-400 hover:text-pink-600 bg-gray-50 rounded-full hover:bg-pink-50 transition-colors"><InstagramIcon className="w-5 h-5"/></a>}
-               {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" className="p-2 w-9 h-9 text-gray-400 hover:text-black bg-gray-50 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center font-black text-sm">d</a>}
+               {settings.social_facebook && <a href={settings.social_facebook} target="_blank" aria-label="Facebook" className="p-2 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-full hover:bg-blue-50 transition-colors"><FacebookIcon className="w-5 h-5"/></a>}
+               {settings.social_instagram && <a href={settings.social_instagram} target="_blank" aria-label="Instagram" className="p-2 text-gray-600 hover:text-pink-600 bg-gray-100 rounded-full hover:bg-pink-50 transition-colors"><InstagramIcon className="w-5 h-5"/></a>}
+               {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" aria-label="TikTok" className="p-2 w-9 h-9 text-gray-600 hover:text-black bg-gray-100 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center font-black text-sm">d</a>}
             </div>
           </div>
         </header>

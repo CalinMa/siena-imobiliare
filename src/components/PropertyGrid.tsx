@@ -67,10 +67,10 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
 
         {displayImages.length > 1 && (
           <>
-            <button onClick={scrollPrev} className="hidden md:block absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
+            <button aria-label="Imaginea anterioară" onClick={scrollPrev} className="hidden md:block absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
               <ChevronLeft size={20} />
             </button>
-            <button onClick={scrollNext} className="hidden md:block absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
+            <button aria-label="Imaginea următoare" onClick={scrollNext} className="hidden md:block absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-30 opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none">
               <ChevronRight size={20} />
             </button>
           </>
@@ -132,10 +132,11 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
           </Link>
           {(p.status === 'activ' || p.status === 'Activă') && (
             <a 
-              href={`https://wa.me/40700000000?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
+              href={`https://wa.me/${p.agent_whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
               target="_blank"
-              className="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-full transition-transform hover:scale-110 shadow-sm"
-              title="Scrie pe WhatsApp"
+              rel="noopener noreferrer"
+              aria-label="Contactează pe WhatsApp"
+              className="bg-[#25D366] hover:bg-[#128C7E] text-white p-2.5 rounded-full shadow-md transition-colors"
             >
               <WhatsappIcon className="w-5 h-5" />
             </a>

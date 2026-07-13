@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import db from "@/lib/db";
 import PropertyGrid from "@/components/PropertyGrid";
 import GoogleReviewsMarquee from "@/components/GoogleReviewsMarquee";
@@ -27,8 +28,16 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <section className="relative w-full h-[55vh] min-h-[400px] flex flex-col bg-gray-900 text-white text-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src={settings.hero_image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2000'} 
+            alt="Hero Background" 
+            fill 
+            priority
+            className="object-cover" 
+          />
+        </div>
         <div className="absolute inset-0 bg-black/50 z-10" />
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${settings.hero_image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2000'}')` }} />
         
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 w-full pt-8 md:pt-0">
           <div className="max-w-3xl">
