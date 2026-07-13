@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 export default function GoogleReviewsMarquee() {
   const [reviews, setReviews] = useState<any[]>([]);
@@ -39,7 +40,7 @@ export default function GoogleReviewsMarquee() {
           <div key={i} className="w-64 md:w-80 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-3 md:p-4 shrink-0 shadow-lg flex flex-col justify-between text-white hover:scale-105 hover:bg-white/20 hover:z-50 transition-all duration-300">
             <div>
               <div className="flex items-start gap-3 mb-2">
-                <img src={review.profile_photo_url} alt={review.author_name} className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0" />
+                <Image src={review.profile_photo_url} width={40} height={40} alt={review.author_name} className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <div className="font-bold text-xs md:text-sm text-white truncate">{review.author_name}</div>

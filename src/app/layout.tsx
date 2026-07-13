@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin } from "lucide-react";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -80,7 +81,7 @@ export default async function RootLayout({
           <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center transform hover:scale-105 transition-transform duration-300">
-              <img src="/logo.jpg" alt="Siena Imobiliare" className="h-16 md:h-20 w-auto object-contain" />
+              <Image src="/logo.jpg" alt="Siena Imobiliare" width={200} height={80} priority className="h-16 md:h-20 w-auto object-contain" />
             </Link>
             
             {/* Nav Links */}

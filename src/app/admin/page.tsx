@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye, CheckCircle, AlertCircle, GripVertical } from "lucide-react";
 import { ROMANIA_DATA, ROMANIA_NEIGHBORHOODS } from "@/lib/locationData";
 import { CRM_TAGS } from "@/lib/crmTags";
+import Image from "next/image";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -528,7 +529,7 @@ export default function AdminPage() {
                       >
                         <div className="flex items-center gap-3">
                           <GripVertical className="w-4 h-4 text-gray-400" />
-                          <img src={img} className="h-10 w-14 object-cover rounded" />
+                          <Image src={img} width={56} height={40} className="object-cover rounded" alt="Thumbnail" />
                           <div className="flex flex-col">
                             <span className={`font-bold text-xs ${idx === 0 ? 'text-green-700' : 'text-gray-600'}`}>
                               {idx === 0 ? "🌟 Imagine Principală" : `Imagine ${idx + 1}`}
@@ -630,7 +631,7 @@ export default function AdminPage() {
                     return (
                       <tr key={p.id} className="border-b hover:bg-gray-50 transition-colors">
                         <td className="p-3 w-20">
-                          <img src={images[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=200'} className="w-16 h-12 object-cover rounded shadow-sm" />
+                          <Image src={images[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=200'} width={64} height={48} className="object-cover rounded shadow-sm" alt="Thumbnail" />
                         </td>
                         <td className="p-3">
                           <div className="font-bold text-gray-900 line-clamp-1">{p.title}</div>
@@ -706,7 +707,7 @@ export default function AdminPage() {
                     </label>
                     {settings.hero_image && (
                       <div className="relative w-48 h-32 rounded-xl overflow-hidden border shadow-sm group">
-                        <img src={settings.hero_image} className="w-full h-full object-cover" />
+                        <Image src={settings.hero_image} fill className="object-cover" alt="Hero Image" />
                         <button type="button" onClick={() => setSettings({...settings, hero_image: ''})} className="absolute top-2 right-2 bg-red-600 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                           <Trash2 className="w-4 h-4"/>
                         </button>
