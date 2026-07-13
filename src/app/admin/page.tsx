@@ -6,6 +6,7 @@ import { ROMANIA_DATA, ROMANIA_NEIGHBORHOODS } from "@/lib/locationData";
 import { CRM_TAGS } from "@/lib/crmTags";
 import Image from "next/image";
 import QRCode from "react-qr-code";
+import AdminSkeleton from "@/components/Skeletons/AdminSkeleton";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -233,7 +234,7 @@ export default function AdminPage() {
     }
   };
 
-  if (loading) return <div className="p-10 text-center">Se încarcă...</div>;
+  if (loading) return <AdminSkeleton />;
 
   if (!authenticated) {
     return (
@@ -759,6 +760,10 @@ export default function AdminPage() {
                   <div>
                     <label className="block font-medium mb-1 text-sm">TikTok Link</label>
                     <input type="text" className="w-full border rounded-lg px-3 py-2" value={settings.social_tiktok || ''} onChange={e => setSettings({...settings, social_tiktok: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="block font-medium mb-1 text-sm">Google Business Profile Link</label>
+                    <input type="text" className="w-full border rounded-lg px-3 py-2" value={settings.social_google || ''} onChange={e => setSettings({...settings, social_google: e.target.value})} placeholder="Linkul către profilul pe hartă" />
                   </div>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ShareButton from "./ShareButton";
 
 const WhatsappIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -130,17 +131,26 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
           <Link href={url} className="text-green-700 font-bold text-sm flex items-center hover:text-green-800 transition-colors">
             Detalii complete &rarr;
           </Link>
-          {(p.status === 'activ' || p.status === 'Activă') && (
-            <a 
-              href={`https://wa.me/${p.agent_whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Contactează pe WhatsApp"
-              className="bg-[#25D366] hover:bg-[#128C7E] text-white p-2.5 rounded-full shadow-md transition-colors"
-            >
-              <WhatsappIcon className="w-5 h-5" />
-            </a>
-          )}
+          <div className="flex items-center gap-2">
+            <ShareButton 
+              url={url} 
+              title={`Siena Imobiliare: ${p.title}`} 
+              text={p.description?.substring(0, 100) + '...'}
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2.5 rounded-full shadow-sm"
+            />
+            {(p.status === 'activ' || p.status === 'Activă') && (
+              <a 
+                href={`https://wa.me/${p.agent_whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Contactează pe WhatsApp"
+                className="bg-[#25D366] hover:bg-[#128C7E] text-white p-2.5 rounded-full shadow-md transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <WhatsappIcon className="w-5 h-5" />
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>

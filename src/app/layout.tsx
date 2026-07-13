@@ -109,10 +109,11 @@ export default async function RootLayout({
               <p className="text-sm">{settings.agency_description || 'Vindem și preluăm proprietăți.'}</p>
             </div>
             <div>
-              <h3 className="text-white text-lg font-bold mb-4">Linkuri Utile</h3>
+              <h3 className="text-white text-lg font-bold mb-4">Link-uri Rapide</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/" className="hover:text-white">Anunțuri Active</Link></li>
-                <li><Link href="/vandute" className="hover:text-white">Proprietăți Vândute</Link></li>
+                <li><Link href="/" className="hover:text-white">Pagina Principală</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
+                <li><Link href="/termeni" className="hover:text-white">Termeni și Politici (GDPR)</Link></li>
               </ul>
             </div>
             <div>
@@ -123,7 +124,11 @@ export default async function RootLayout({
                 {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" className="hover:text-white flex items-center gap-2 text-sm font-bold">TikTok</a>}
               </div>
               <div className="mt-4">
-                <a href="#" target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
+                {settings.social_google ? (
+                  <a href={settings.social_google} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
+                ) : (
+                  <a href="#" target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
+                )}
               </div>
             </div>
           </div>
