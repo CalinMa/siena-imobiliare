@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit2, LogOut, ChevronRight, Eye, CheckCircle, AlertCircl
 import { ROMANIA_DATA, ROMANIA_NEIGHBORHOODS } from "@/lib/locationData";
 import { CRM_TAGS } from "@/lib/crmTags";
 import Image from "next/image";
+import QRCode from "react-qr-code";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -776,6 +777,82 @@ export default function AdminPage() {
                   <p className="text-xs text-purple-700 mt-2">
                     Lipește aici token-ul generat din contul tău de pe Imografic. Anunțurile se vor sincroniza automat la fiecare salvare.
                   </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-gray-800">6. Coduri QR Utile (Print/Afișe)</h3>
+                <div className="bg-white p-6 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* QR Code - Website */}
+                  <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <h4 className="font-bold mb-4 text-center">Cod QR - Prima Pagină Site</h4>
+                    <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
+                      <QRCode id="qr-website" value="https://sienaimobiliare.ro" size={180} level="H" />
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        const svg = document.getElementById('qr-website');
+                        if (!svg) return;
+                        const svgData = new XMLSerializer().serializeToString(svg);
+                        const blob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'QR_Site_Siena.svg';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                    >
+                      Descarcă Vectorial (SVG)
+                    </button>
+                    <p className="text-xs text-gray-500 mt-3 text-center">
+                      Acest cod duce vizitatorii direct pe https://sienaimobiliare.ro
+                    </p>
+                  </div>
+
+                  {/* QR Code - Google Reviews */}
+                  <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <h4 className="font-bold mb-4 text-center">Cod QR - Recenzii Google</h4>
+                    <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
+                      <QRCode 
+                        id="qr-reviews" 
+                        value={settings.google_place_id ? `https://search.google.com/local/writereview?placeid=${settings.google_place_id}` : "https://google.com"} 
+                        size={180} 
+                        level="H" 
+                      />
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        if (!settings.google_place_id) {
+                          alert('Te rog să adaugi un Google Place ID mai sus (secțiunea 3) și să salvezi setările.');
+                          return;
+                        }
+                        const svg = document.getElementById('qr-reviews');
+                        if (!svg) return;
+                        const svgData = new XMLSerializer().serializeToString(svg);
+                        const blob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'QR_Recenzii_Google.svg';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                    >
+                      Descarcă Vectorial (SVG)
+                    </button>
+                    <p className="text-xs text-gray-500 mt-3 text-center">
+                      {settings.google_place_id 
+                        ? 'Acest cod va deschide pagina voastră de recenzii Google.' 
+                        : 'Lipsește Google Place ID. Completează-l mai sus!'}
+                    </p>
+                  </div>
                 </div>
               </div>
 

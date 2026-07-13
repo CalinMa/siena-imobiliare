@@ -150,7 +150,7 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
-  const filteredProperties = hideSearch ? properties : properties.filter((p) => {
+  let filteredProperties = hideSearch ? [...properties] : properties.filter((p) => {
     const term = search.toLowerCase();
     const tags = Array.isArray(p.tags) ? p.tags : (typeof p.tags === 'string' ? JSON.parse(p.tags) : []);
     
@@ -166,6 +166,15 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(p.property_type);
 
     return matchesSearch && matchesType;
+  });
+
+  // Sort: Active properties first, Sold/Rented last
+  filteredProperties = filteredProperties.sort((a, b) => {
+    const isAActive = a.status === 'activ' || a.status === 'Activă';
+    const isBActive = b.status === 'activ' || b.status === 'Activă';
+    if (isAActive && !isBActive) return -1;
+    if (!isAActive && isBActive) return 1;
+    return 0;
   });
 
   return (
