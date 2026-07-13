@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
+import CookieConsent from "@/components/CookieConsent";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
@@ -136,6 +137,8 @@ export default async function RootLayout({
             &copy; {new Date().getFullYear()} Siena Imobiliare SRL. Toate drepturile rezervate.
           </div>
         </footer>
+
+        <CookieConsent />
       </body>
     </html>
   );
