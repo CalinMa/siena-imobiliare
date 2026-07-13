@@ -140,7 +140,7 @@ const PropertyCardItem = ({ p, hidePrices, basePath, defaultWhatsapp }: { p: any
             />
             {(p.status === 'activ' || p.status === 'Activă') && (
               <a 
-                href={`https://wa.me/${(p.agent_whatsapp || defaultWhatsapp || '0700000000').replace(/[^0-9]/g, '').replace(/^0/, '40')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
+                href={`https://wa.me/${(p.agent_whatsapp || defaultWhatsapp || '0744177728').replace(/[^0-9]/g, '').replace(/^0/, '40')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contactează pe WhatsApp"
