@@ -22,7 +22,7 @@ const PROPERTY_TYPES = [
   { id: 'industrial', label: 'Spații Industriale' }
 ];
 
-const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: boolean, basePath: string }) => {
+const PropertyCardItem = ({ p, hidePrices, basePath, defaultWhatsapp }: { p: any, hidePrices?: boolean, basePath: string, defaultWhatsapp?: string }) => {
   const imagesRaw = typeof p.images === 'string' ? JSON.parse(p.images) : (p.images || []);
   let displayImages = imagesRaw.slice(0, 5);
   if (displayImages.length === 0) {
@@ -140,7 +140,7 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
             />
             {(p.status === 'activ' || p.status === 'Activă') && (
               <a 
-                href={`https://wa.me/${p.agent_whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
+                href={`https://wa.me/${(p.agent_whatsapp || defaultWhatsapp || '0700000000').replace(/[^0-9]/g, '').replace(/^0/, '40')}?text=${encodeURIComponent(`Bună ziua, vă contactez în legătură cu anunțul: ${p.title}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contactează pe WhatsApp"
@@ -157,7 +157,7 @@ const PropertyCardItem = ({ p, hidePrices, basePath }: { p: any, hidePrices?: bo
   );
 };
 
-export default function PropertyGrid({ properties, basePath = '/proprietati', hideSearch = false, hidePrices = false }: { properties: any[], basePath?: string, hideSearch?: boolean, hidePrices?: boolean }) {
+export default function PropertyGrid({ properties, basePath = '/proprietati', hideSearch = false, hidePrices = false, defaultWhatsapp = '' }: { properties: any[], basePath?: string, hideSearch?: boolean, hidePrices?: boolean, defaultWhatsapp?: string }) {
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
@@ -248,7 +248,7 @@ export default function PropertyGrid({ properties, basePath = '/proprietati', hi
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProperties.map((p: any) => (
-            <PropertyCardItem key={p.id} p={p} hidePrices={hidePrices} basePath={basePath} />
+            <PropertyCardItem key={p.id} p={p} hidePrices={hidePrices} basePath={basePath} defaultWhatsapp={defaultWhatsapp} />
           ))}
         </div>
       )}

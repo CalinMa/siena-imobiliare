@@ -67,7 +67,7 @@ export default async function Home() {
           )}
         </div>
 
-        <PropertyGrid properties={properties} hidePrices={settings.hide_prices_on_cards === 'true'} />
+        <PropertyGrid properties={properties} hidePrices={settings.hide_prices_on_cards === 'true'} defaultWhatsapp={settings.contact_whatsapp} />
       </main>
     </div>
   );

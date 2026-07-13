@@ -105,7 +105,7 @@ export default async function ContactPage() {
               </p>
               
               <a 
-                href={settings.contact_whatsapp ? `https://wa.me/${settings.contact_whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Bună ziua, aș dori să vă contactez în legătură cu serviciile Siena Imobiliare.')}` : '#'}
+                href={settings.contact_whatsapp ? `https://wa.me/${settings.contact_whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '40')}?text=${encodeURIComponent('Bună ziua, aș dori să vă contactez în legătură cu serviciile Siena Imobiliare.')}` : '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2"
