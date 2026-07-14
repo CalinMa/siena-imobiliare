@@ -69,6 +69,18 @@ async function getSettings() {
   }
 }
 
+const formatSocialUrl = (platform: string, url: string) => {
+  if (!url) return '';
+  url = url.trim();
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  
+  if (platform === 'tiktok' && url.startsWith('@')) return `https://www.tiktok.com/${url}`;
+  if (platform === 'instagram' && url.startsWith('@')) return `https://www.instagram.com/${url.substring(1)}`;
+  if (platform === 'facebook' && !url.includes('/')) return `https://www.facebook.com/${url}`;
+  
+  return `https://${url}`;
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -95,9 +107,9 @@ export default async function RootLayout({
             
             {/* Social Icons */}
             <div className="flex items-center gap-3">
-               {settings.social_facebook && <a href={settings.social_facebook} target="_blank" aria-label="Facebook" className="p-2 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-full hover:bg-blue-50 transition-colors"><FacebookIcon className="w-5 h-5"/></a>}
-               {settings.social_instagram && <a href={settings.social_instagram} target="_blank" aria-label="Instagram" className="p-2 text-gray-600 hover:text-pink-600 bg-gray-100 rounded-full hover:bg-pink-50 transition-colors"><InstagramIcon className="w-5 h-5"/></a>}
-               {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" aria-label="TikTok" className="p-2 w-9 h-9 text-gray-600 hover:text-black bg-gray-100 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center font-black text-sm">d</a>}
+               {settings.social_facebook && <a href={formatSocialUrl('facebook', settings.social_facebook)} target="_blank" aria-label="Facebook" className="p-2 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-full hover:bg-blue-50 transition-colors"><FacebookIcon className="w-5 h-5"/></a>}
+               {settings.social_instagram && <a href={formatSocialUrl('instagram', settings.social_instagram)} target="_blank" aria-label="Instagram" className="p-2 text-gray-600 hover:text-pink-600 bg-gray-100 rounded-full hover:bg-pink-50 transition-colors"><InstagramIcon className="w-5 h-5"/></a>}
+               {settings.social_tiktok && <a href={formatSocialUrl('tiktok', settings.social_tiktok)} target="_blank" aria-label="TikTok" className="p-2 w-9 h-9 text-gray-600 hover:text-black bg-gray-100 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center font-black text-sm">d</a>}
             </div>
           </div>
         </header>
@@ -121,13 +133,13 @@ export default async function RootLayout({
             <div>
               <h3 className="text-white text-lg font-bold mb-4">Rețele Sociale</h3>
               <div className="flex flex-col gap-2">
-                {settings.social_facebook && <a href={settings.social_facebook} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><FacebookIcon className="w-4 h-4"/> Facebook</a>}
-                {settings.social_instagram && <a href={settings.social_instagram} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><InstagramIcon className="w-4 h-4"/> Instagram</a>}
-                {settings.social_tiktok && <a href={settings.social_tiktok} target="_blank" className="hover:text-white flex items-center gap-2 text-sm font-bold">TikTok</a>}
+                {settings.social_facebook && <a href={formatSocialUrl('facebook', settings.social_facebook)} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><FacebookIcon className="w-4 h-4"/> Facebook</a>}
+                {settings.social_instagram && <a href={formatSocialUrl('instagram', settings.social_instagram)} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><InstagramIcon className="w-4 h-4"/> Instagram</a>}
+                {settings.social_tiktok && <a href={formatSocialUrl('tiktok', settings.social_tiktok)} target="_blank" className="hover:text-white flex items-center gap-2 text-sm font-bold">TikTok</a>}
               </div>
               <div className="mt-4">
                 {settings.social_google ? (
-                  <a href={settings.social_google} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
+                  <a href={formatSocialUrl('google', settings.social_google)} target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
                 ) : (
                   <a href="#" target="_blank" className="hover:text-white flex items-center gap-2 text-sm"><MapPin className="w-4 h-4"/> Google Business Profile</a>
                 )}
