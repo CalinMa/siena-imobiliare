@@ -1,14 +1,9 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import db from '@/lib/db';
 import { syncPropertyToImografic } from '@/lib/imograficSync';
+import { isAuthenticated } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
-
-async function isAuthenticated() {
-  const cookieStore = await cookies();
-  return cookieStore.get('admin_token')?.value === 'authenticated';
-}
 
 export async function GET() {
   if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
