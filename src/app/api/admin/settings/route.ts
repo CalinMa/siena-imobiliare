@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { isAuthenticated } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,6 +30,7 @@ export async function PUT(request: Request) {
         [key, String(val), String(val)]
       );
     }
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to update' }, { status: 500 });

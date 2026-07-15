@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { syncPropertyToImografic } from '@/lib/imograficSync';
 import { isAuthenticated } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
     const insertId = (result as any).insertId;
     syncPropertyToImografic(insertId).catch(err => console.error("Sync error:", err));
 
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, id: insertId });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to create' }, { status: 500 });
