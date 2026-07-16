@@ -2,7 +2,7 @@ import db from './db';
 
 const IMOGRAFIC_URL = process.env.NODE_ENV === 'development' 
   ? 'http://localhost:3000' 
-  : 'https://www.imografic.ro';
+  : 'https://imografic.ro';
 
 function safeParseJson(val: string) {
   try { return JSON.parse(val); } catch (e) { return null; }
