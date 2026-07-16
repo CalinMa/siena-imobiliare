@@ -71,7 +71,7 @@ export async function syncPropertyToImografic(propertyId: number | string) {
     };
 
     // 4. Send request
-    const response = await fetch(`${IMOGRAFIC_URL}/api/agency-sync`, {
+    const response = await fetch(`${IMOGRAFIC_URL}/ro/api/agency-sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ export async function deletePropertyFromImografic(propertyId: number | string) {
       return;
     }
 
-    const response = await fetch(`${IMOGRAFIC_URL}/api/agency-sync?external_id=${propertyId}`, {
+    const response = await fetch(`${IMOGRAFIC_URL}/ro/api/agency-sync?external_id=${propertyId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${apiKey}`
