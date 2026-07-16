@@ -90,3 +90,33 @@ export async function syncPropertyToImografic(propertyId: number | string) {
     console.error('[ImograficSync] Error during sync:', error);
   }
 }
+
+export async function deletePropertyFromImografic(propertyId: number | string) {
+  try {
+    const [settingRows]: any = await db.query(
+      'SELECT setting_value FROM settings WHERE setting_key = "imografic_api_key"'
+    );
+    const apiKey = settingRows[0]?.setting_value;
+
+    if (!apiKey) {
+      console.log('[ImograficSync] No API Key set. Skipping delete sync.');
+      return;
+    }
+
+    const response = await fetch(`${IMOGRAFIC_URL}/api/agency-sync?external_id=${propertyId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`
+      }
+    });
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      console.error(`[ImograficSync] Failed to delete property ${propertyId}. HTTP ${response.status}:`, errBody);
+    } else {
+      console.log(`[ImograficSync] Successfully deleted property ${propertyId} from Imografic.`);
+    }
+  } catch (error) {
+    console.error('[ImograficSync] Error during delete sync:', error);
+  }
+}

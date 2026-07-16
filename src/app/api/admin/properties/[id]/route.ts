@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { syncPropertyToImografic } from '@/lib/imograficSync';
+import { syncPropertyToImografic, deletePropertyFromImografic } from '@/lib/imograficSync';
 import { isAuthenticated } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
@@ -48,6 +48,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   
   try {
     await db.query('DELETE FROM properties WHERE id = ?', [id]);
+    deletePropertyFromImografic(id).catch(err => console.error("Sync delete error:", err));
     revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (err) {
