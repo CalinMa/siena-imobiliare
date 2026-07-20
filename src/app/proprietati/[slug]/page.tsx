@@ -80,7 +80,7 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
     similar = [...similar, ...otherRows];
   }
 
-  const hasTechnicalDetails = p.surface_useable > 0 || p.surface_total > 0 || p.surface_land > 0 || p.bathrooms > 0 || p.rooms > 0 || p.bedrooms > 0 || p.floor || p.building_construction_year > 0;
+  const hasTechnicalDetails = p.surface_useable > 0 || p.surface_total > 0 || p.surface_land > 0 || p.front_stradal > 0 || p.bathrooms > 0 || p.rooms > 0 || p.bedrooms > 0 || p.floor || p.building_construction_year > 0;
   const hasTags = Object.keys(groupedTags).length > 0;
 
   return (
@@ -146,6 +146,12 @@ export default async function PropertyPage(props: { params: Promise<{ slug: stri
                     <div className="flex flex-col">
                       <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Suprafață teren</span>
                       <span className="text-xl font-medium text-gray-900">{p.surface_land} mp</span>
+                    </div>
+                  )}
+                  {p.front_stradal > 0 && (
+                    <div className="flex flex-col">
+                      <span className="text-gray-500 text-sm uppercase tracking-wider font-bold">Front stradal</span>
+                      <span className="text-xl font-medium text-gray-900">{p.front_stradal} m</span>
                     </div>
                   )}
                   {p.bathrooms > 0 && (
