@@ -42,7 +42,7 @@ export async function syncPropertyToImografic(propertyId: number | string) {
       description: property.description,
       price: property.price,
       currency: property.currency,
-      transaction_type: property.transaction_type, // "Vânzare" / "Închiriere"
+      transaction_type: property.transaction_type, // "vanzare" / "inchiriere" (lowercase, fără diacritice)
       property_type: property.property_type,       // "Apartament", "Casă", etc.
       
       county: property.county,
