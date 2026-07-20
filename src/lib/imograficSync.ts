@@ -53,6 +53,7 @@ export async function syncPropertyToImografic(propertyId: number | string) {
       surface_useable: property.surface_useable,
       surface_total: property.surface_total,
       surface_land: property.surface_land,
+      front_stradal: property.front_stradal,
       
       rooms: property.rooms,
       bedrooms: property.bedrooms,
