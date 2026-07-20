@@ -153,6 +153,7 @@ export default function AdminPage() {
       surface_useable: Number(p.surface_useable) || 0,
       surface_total: Number(p.surface_total) || 0,
       surface_land: Number(p.surface_land) || 0,
+      front_stradal: Number(p.front_stradal) || '',
       rooms: Number(p.rooms) || 0,
       bedrooms: Number(p.bedrooms) || 0,
       bathrooms: Number(p.bathrooms) || 0,
