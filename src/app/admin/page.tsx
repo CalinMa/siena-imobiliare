@@ -28,10 +28,10 @@ export default function AdminPage() {
   };
 
   const emptyForm = {
-    title: "", description: "", price: 0, currency: "EUR", status: "Activă", images: [] as string[],
+    title: "", description: "", price: "" as string | number, currency: "EUR", status: "Activă", images: [] as string[],
     transaction_type: "vanzare", property_type: "apartament", county: "", city: "", zone: "", address: "", transacted_by_us: false,
-    surface_useable: 0, surface_total: 0, surface_land: 0,
-    rooms: 0, bedrooms: 0, bathrooms: 0, floor: "", building_floors: 0, building_construction_year: 0,
+    surface_useable: "" as string | number, surface_total: "" as string | number, surface_land: "" as string | number, front_stradal: "" as string | number,
+    rooms: "" as string | number, bedrooms: "" as string | number, bathrooms: "" as string | number, floor: "", building_floors: "" as string | number, building_construction_year: "" as string | number,
     partitioning: "", comfort: "", tags: [] as string[], video_link: "", virtual_tour_link: ""
   };
 
@@ -387,7 +387,7 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-medium mb-1">Preț și Monedă</label>
                     <div className="flex gap-2">
-                      <input required type="number" className="flex-1 border rounded-lg px-3 py-2 min-w-0" value={form.price} onChange={e => setForm({...form, price: Number(e.target.value)})} />
+                      <input required type="number" className="flex-1 border rounded-lg px-3 py-2 min-w-0" value={form.price} onChange={e => setForm({...form, price: e.target.value === '' ? '' : Number(e.target.value)})} />
                       <select className="w-24 border rounded-lg px-3 py-2 bg-gray-50 font-bold shrink-0" value={form.currency} onChange={e => setForm({...form, currency: e.target.value})}>
                         <option value="EUR">€ EUR</option>
                         <option value="RON">RON</option>
@@ -431,19 +431,25 @@ export default function AdminPage() {
                     <>
                       <div>
                         <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață utilă (mp)</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_useable} onChange={e => setForm({...form, surface_useable: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_useable} onChange={e => setForm({...form, surface_useable: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                       <div>
                         <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață totală (mp)</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_total} onChange={e => setForm({...form, surface_total: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_total} onChange={e => setForm({...form, surface_total: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                     </>
                   )}
                   {form.property_type !== 'apartament' && (
-                    <div>
-                      <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață teren (mp)</label>
-                      <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_land} onChange={e => setForm({...form, surface_land: Number(e.target.value)})} />
-                    </div>
+                    <>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-500">Suprafață teren (mp)</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.surface_land} onChange={e => setForm({...form, surface_land: e.target.value === '' ? '' : Number(e.target.value)})} />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-500">Front stradal (m)</label>
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.front_stradal} onChange={e => setForm({...form, front_stradal: e.target.value === '' ? '' : Number(e.target.value)})} />
+                      </div>
+                    </>
                   )}
                 </div>
                 {form.property_type !== 'teren' && (
@@ -451,15 +457,15 @@ export default function AdminPage() {
                     <div className="grid grid-cols-3 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-1">Camere</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.rooms} onChange={e => setForm({...form, rooms: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.rooms} onChange={e => setForm({...form, rooms: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">Dormitoare</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bedrooms} onChange={e => setForm({...form, bedrooms: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bedrooms} onChange={e => setForm({...form, bedrooms: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">Băi</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bathrooms} onChange={e => setForm({...form, bathrooms: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.bathrooms} onChange={e => setForm({...form, bathrooms: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
@@ -469,11 +475,11 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <label className="block text-xs font-medium mb-1 text-gray-500">Etaje Clădire</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_floors} onChange={e => setForm({...form, building_floors: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_floors} onChange={e => setForm({...form, building_floors: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">An Const.</label>
-                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_construction_year} onChange={e => setForm({...form, building_construction_year: Number(e.target.value)})} />
+                        <input type="number" className="w-full border rounded-lg px-3 py-2" value={form.building_construction_year} onChange={e => setForm({...form, building_construction_year: e.target.value === '' ? '' : Number(e.target.value)})} />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
