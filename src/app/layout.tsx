@@ -102,6 +102,7 @@ export default async function RootLayout({
             <nav className="hidden md:flex items-center gap-2 font-bold text-gray-700 text-sm tracking-wide uppercase">
               <Link href="/" className="px-5 py-2.5 rounded-full hover:bg-gray-50 hover:text-orange-600 transition-all">Oferte Active</Link>
               <Link href="/vandute" className="px-5 py-2.5 rounded-full hover:bg-gray-50 hover:text-orange-600 transition-all">Portofoliu</Link>
+              <Link href="/articole-utile" className="px-5 py-2.5 rounded-full hover:bg-gray-50 hover:text-orange-600 transition-all">Articole Utile</Link>
               <Link href="/contact" className="ml-4 px-6 py-2.5 bg-gray-900 text-white rounded-full hover:bg-orange-600 hover:shadow-md transform hover:-translate-y-0.5 transition-all">Contact</Link>
             </nav>
             
@@ -126,6 +127,7 @@ export default async function RootLayout({
               <h3 className="text-white text-lg font-bold mb-4">Link-uri Rapide</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/" className="hover:text-white">Pagina Principală</Link></li>
+                <li><Link href="/articole-utile" className="hover:text-white">Articole Utile (Blog)</Link></li>
                 <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
                 <li><Link href="/termeni" className="hover:text-white">Termeni și Politici (GDPR)</Link></li>
               </ul>

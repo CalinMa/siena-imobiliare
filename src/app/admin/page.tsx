@@ -7,6 +7,7 @@ import { CRM_TAGS } from "@/lib/crmTags";
 import Image from "next/image";
 import QRCode from "react-qr-code";
 import AdminSkeleton from "@/components/Skeletons/AdminSkeleton";
+import BlogAdmin from "@/components/BlogAdmin";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -18,7 +19,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("general");
   const [isUploading, setIsUploading] = useState(false);
   const [draggedImgIdx, setDraggedImgIdx] = useState<number | null>(null);
-  const [adminTab, setAdminTab] = useState<'anunturi' | 'cont'>('anunturi');
+  const [adminTab, setAdminTab] = useState<'anunturi' | 'cont' | 'blog'>('anunturi');
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null);
 
@@ -281,22 +282,30 @@ export default function AdminPage() {
           </button>
         </div>
 
-        <div className="flex border-b mb-8 gap-8">
+        <div className="flex border-b mb-8 gap-8 overflow-x-auto pb-2">
           <button 
-            className={`py-3 font-bold text-lg border-b-4 transition-colors ${adminTab === 'anunturi' ? 'border-green-700 text-green-800' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+            className={`py-3 font-bold text-lg border-b-4 transition-colors whitespace-nowrap ${adminTab === 'anunturi' ? 'border-green-700 text-green-800' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
             onClick={() => setAdminTab('anunturi')}
           >
             Gestionare Anunțuri
           </button>
           <button 
-            className={`py-3 font-bold text-lg border-b-4 transition-colors ${adminTab === 'cont' ? 'border-green-700 text-green-800' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+            className={`py-3 font-bold text-lg border-b-4 transition-colors whitespace-nowrap ${adminTab === 'blog' ? 'border-green-700 text-green-800' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+            onClick={() => setAdminTab('blog')}
+          >
+            Blog / Articole
+          </button>
+          <button 
+            className={`py-3 font-bold text-lg border-b-4 transition-colors whitespace-nowrap ${adminTab === 'cont' ? 'border-green-700 text-green-800' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
             onClick={() => setAdminTab('cont')}
           >
             Contul Meu (Setări)
           </button>
         </div>
 
-        {adminTab === 'anunturi' ? (
+        {adminTab === 'blog' ? (
+          <BlogAdmin />
+        ) : adminTab === 'anunturi' ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Formular Adăugare / Editare */}

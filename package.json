@@ -10,6 +10,7 @@
     "test": "node scripts/test-sync.js"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.20",
     "cloudinary": "^2.10.0",
     "dotenv": "^17.4.2",
     "embla-carousel-react": "^8.6.0",
@@ -19,6 +20,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-qr-code": "^2.2.0",
+    "react-quill-new": "^3.8.3",
     "react-social-media-embed": "^2.5.18",
     "romanian-cities": "^1.0.4",
     "yet-another-react-lightbox": "^3.32.1"
