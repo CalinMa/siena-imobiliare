@@ -49,10 +49,10 @@ export default async function BlogPage() {
                   <div className="text-sm font-semibold text-green-700 mb-3">
                     {new Date(post.published_at).toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-700 transition-colors line-clamp-2 break-words">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-700 transition-colors line-clamp-2 hyphens-auto">
                     {post.title}
                   </h2>
-                  <p className="text-gray-600 line-clamp-3 mb-6 flex-1 break-words">
+                  <p className="text-gray-600 line-clamp-3 mb-6 flex-1 hyphens-auto">
                     {post.summary}
                   </p>
                   

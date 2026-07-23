@@ -57,16 +57,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="flex-1 w-full mt-10 mb-16 bg-white min-h-screen overflow-hidden">
-        <article className="max-w-4xl mx-auto px-4 break-words w-full overflow-hidden">
+        <article className="max-w-4xl mx-auto px-4 w-full hyphens-auto">
           <header className="mb-12 text-center w-full">
             <div className="text-green-700 font-bold mb-4">
               {new Date(post.published_at).toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight break-words">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight hyphens-auto">
               {post.title}
             </h1>
             {post.summary && (
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto break-words">
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto hyphens-auto">
                 {post.summary}
               </p>
             )}
@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
              If @tailwindcss/typography is available, 'prose' will style the HTML nicely.
           */}
           <div 
-            className="prose prose-lg md:prose-xl prose-green mx-auto max-w-3xl prose-headings:font-bold prose-img:rounded-xl text-gray-800 break-words max-w-full"
+            className="prose prose-lg md:prose-xl prose-green mx-auto max-w-3xl prose-headings:font-bold prose-img:rounded-xl text-gray-800 hyphens-auto max-w-full"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
