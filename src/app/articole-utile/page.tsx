@@ -49,11 +49,11 @@ export default async function BlogPage() {
                   <div className="text-sm font-semibold text-green-700 mb-3">
                     {new Date(post.published_at).toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-700 transition-colors line-clamp-2 hyphens-auto">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-700 transition-colors line-clamp-2">
                     {post.title}
                   </h2>
-                  <p className="text-gray-600 line-clamp-3 mb-6 flex-1 hyphens-auto">
-                    {post.summary}
+                  <p className="text-gray-600 line-clamp-3 mb-6 flex-1">
+                    {post.summary ? post.summary.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') : ''}
                   </p>
                   
                   <div className="text-green-700 font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">

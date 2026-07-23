@@ -56,41 +56,45 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="flex-1 w-full mt-10 mb-16 bg-white min-h-screen overflow-hidden">
-        <article className="max-w-4xl mx-auto px-4 w-full hyphens-auto">
+      <main className="flex-1 w-full py-16 bg-slate-50 min-h-screen">
+        <article className="max-w-4xl mx-auto px-4 w-full">
           <header className="mb-12 text-center w-full">
             <div className="text-green-700 font-bold mb-4">
-              {new Date(post.published_at).toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
+               {new Date(post.published_at).toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight hyphens-auto">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               {post.title}
             </h1>
             {post.summary && (
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto hyphens-auto">
-                {post.summary}
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                {post.summary.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ')}
               </p>
             )}
           </header>
 
-          {post.image_url && (
-            <div className="relative w-full aspect-[16/9] mb-16 rounded-3xl overflow-hidden shadow-lg">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={post.image_url} 
-                alt={post.title}
-                className="w-full h-full object-cover"
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+            {post.image_url && (
+              <div className="relative w-full aspect-[21/9] sm:aspect-[16/9]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={post.image_url} 
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
+            <div className="p-6 sm:p-10 md:p-14 lg:p-16">
+              {/* 
+                 Prose (Tailwind Typography plugin) styling for the WYSIWYG html content.
+                 If @tailwindcss/typography is available, 'prose' will style the HTML nicely.
+              */}
+              <div 
+                className="prose prose-lg md:prose-xl prose-green mx-auto max-w-none prose-headings:font-bold prose-img:rounded-xl text-gray-800"
+                dangerouslySetInnerHTML={{ __html: post.content.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') }}
               />
             </div>
-          )}
-
-          {/* 
-             Prose (Tailwind Typography plugin) styling for the WYSIWYG html content.
-             If @tailwindcss/typography is available, 'prose' will style the HTML nicely.
-          */}
-          <div 
-            className="prose prose-lg md:prose-xl prose-green mx-auto max-w-3xl prose-headings:font-bold prose-img:rounded-xl text-gray-800 hyphens-auto max-w-full"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          </div>
         </article>
       </main>
     </>
