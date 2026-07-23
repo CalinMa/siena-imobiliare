@@ -36,7 +36,9 @@ export async function POST(request: Request) {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.title, slug, data.summary || '', data.content || '', data.image_url || '',
-        data.meta_title || data.title, data.meta_description || data.summary || '', data.published_at || new Date()
+        (data.meta_title || data.title).substring(0, 255), 
+        (data.meta_description || data.summary || '').substring(0, 255), 
+        data.published_at || new Date()
       ]
     );
 

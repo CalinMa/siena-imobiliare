@@ -16,7 +16,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
        WHERE id = ?`,
       [
         data.title, data.summary || '', data.content || '', data.image_url || '',
-        data.meta_title || data.title, data.meta_description || data.summary || '', data.published_at || new Date(),
+        (data.meta_title || data.title).substring(0, 255), 
+        (data.meta_description || data.summary || '').substring(0, 255), 
+        data.published_at || new Date(),
         id
       ]
     );
